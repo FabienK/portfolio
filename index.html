@@ -33,7 +33,14 @@
 
 <header class="pt-24 pb-10 px-4 max-w-[1200px] mx-auto">
   <div class="bezel-outer">
-    <div class="bezel-inner px-6 sm:px-8 py-8 sm:py-10">
+    <div class="bezel-inner px-6 sm:px-8 py-8 sm:py-10 relative overflow-hidden" style="background:rgba(255,255,255,0.78); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px)">
+      <!-- Fog photo + veil + bloom (règle des tiers 33% 38%) -->
+      <div class="absolute inset-0 -z-10">
+        <img src="assets/fog-hero-2400.jpg" alt="" class="w-full h-full object-cover" style="object-position:50% 38%; filter:saturate(0.65) contrast(1.05) brightness(1.02)" loading="eager" fetchpriority="high">
+        <div class="absolute inset-0" style="background:linear-gradient(to bottom, rgba(253,251,247,0.52), rgba(253,251,247,0.78)); -webkit-mask-image:radial-gradient(ellipse 68% 58% at 33% 38%, transparent 42%, black 78%); mask-image:radial-gradient(ellipse 68% 58% at 33% 38%, transparent 42%, black 78%)"></div>
+        <div class="absolute inset-0" style="background:radial-gradient(ellipse 520px 380px at 33% 38%, rgba(255,255,255,0.92) 0%, transparent 62%); mix-blend-mode:screen"></div>
+      </div>
+      <div class="relative z-10">
       <p class="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.18em] uppercase text-white bg-[#1A1A18] rounded-full px-3 py-1.5"><span class="size-1.5 rounded-full bg-emerald-400"></span> Disponible pour missions</p>
       <h1 class="display text-[32px] sm:text-[44px] lg:text-[52px] font-normal leading-[0.9] tracking-[-0.04em] mt-5">Fabien<br><span class="italic font-normal text-[#6B6B6B]">construit des produits</span></h1>
       <p class="max-w-[60ch] text-[14px] leading-relaxed text-[#3A3A38] mt-4">8 produits · 2 umbrellas · 8 repos GitHub. Design systems, apps guitare, packs print — tout est shippé, documenté, mesurable.</p>
@@ -45,6 +52,7 @@
         <div><div class="display text-[22px] font-bold">8</div><div class="text-[11px] font-bold tracking-widest uppercase text-muted">Produits</div></div>
         <div><div class="display text-[22px] font-bold">8</div><div class="text-[11px] font-bold tracking-widest uppercase text-muted">Repos GH</div></div>
         <div><div class="display text-[22px] font-bold">3</div><div class="text-[11px] font-bold tracking-widest uppercase text-muted">Privés</div></div>
+      </div>
       </div>
     </div>
   </div>
