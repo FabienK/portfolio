@@ -26,14 +26,24 @@
   <h1>ShowMe5WH — Galerie</h1>
   <p class="sub">6 images sur 54 — Flux schnell 1216×832 → 2048×1400 · lexique 34 + styles 20 · <a href="https://github.com/FabienK/Image-generator" target="_blank" style="color:#1A1A18">Image-generator →</a></p>
 </header>
-<div class="grid">
-  <div class="card"><img src="assets/showme5wh/01-plongee.jpg" alt="01 plongée"><div class="meta"><h3>01 — Plongée</h3><p>High-angle plongée view from above — lexique 35p</p></div></div>
-  <div class="card"><img src="assets/showme5wh/12-teleobjectif.jpg" alt="12 téléobjectif"><div class="meta"><h3>12 — Téléobjectif</h3><p>Telephoto compression — lexique</p></div></div>
-  <div class="card"><img src="assets/showme5wh/18-trois-points.jpg" alt="18 trois points"><div class="meta"><h3>18 — Trois points</h3><p>Three-point perspective — lexique</p></div></div>
-  <div class="card"><img src="assets/showme5wh/02-photorealiste.jpg" alt="02 photoréaliste"><div class="meta"><h3>Style — Photoréaliste</h3><p>Tag WHAT — styles-starter 20p (même alien crépusculaire)</p></div></div>
-  <div class="card"><img src="assets/showme5wh/07-3d-render.jpg" alt="07 3d render"><div class="meta"><h3>Style — 3D Render</h3><p>Tag WHAT — styles-starter</p></div></div>
-  <div class="card"><img src="assets/showme5wh/09-cyberpunk.jpg" alt="09 cyberpunk"><div class="meta"><h3>Style — Cyberpunk</h3><p>Tag WHAT — styles-starter</p></div></div>
+<div style="text-align:center; margin:12px 0">
+  <button onclick="localStorage.removeItem('comfy:sel');localStorage.removeItem('showme5wh:selection');location.reload()" style="font-size:11px; color:#6B7280; background:#fff; border:1px solid #E8E6E1; border-radius:999px; padding:6px 12px; cursor:pointer">↺ Revenir aux 6 du départ</button>
 </div>
+<div class="grid" id="grid"></div>
+<script>
+const fallback = ["01-plongee.jpg","12-teleobjectif.jpg","18-trois-points.jpg","02-photorealiste.jpg","07-3d-render.jpg","09-cyberpunk.jpg"];
+const sel = JSON.parse(localStorage.getItem('comfy:sel')||'null') || JSON.parse(localStorage.getItem('showme5wh:selection')||'null') || fallback;
+console.log('Galerie ShowMe5WH — sel', sel);
+const grid=document.getElementById('grid');
+function isComfy(f){ return f.startsWith('4w1h_') || f.startsWith('3drender') || f.startsWith('encyclo') || f.includes('flux'); }
+grid.innerHTML = sel.map(f=>{
+  const src = isComfy(f) ? `assets/comfy-output/${f}` : `assets/showme5wh/${f}`;
+  const label = f.replace('.jpg','').replace('.png','');
+  return `<div class="card"><img src="${src}" alt="${label}" loading="lazy" onerror="this.src='https://picsum.photos/seed/${encodeURIComponent(f)}/600/400'"><div class="meta"><h3>${label}</h3><p>${f}</p></div></div>`;
+}).join('');
+document.querySelector('header p.sub').innerHTML = `${sel.length} images — Flux schnell 1216×832 → 2048×1400 · <a href="gallery-output.html" style="color:#1A1A18">← Choisir dans Output (387)</a> · <a href="gallery-editor.html" style="color:#1A1A18">Éditeur 54</a>`;
+document.querySelector('footer').innerHTML = `${sel.length} / 54 — <a href="gallery-output.html" style="color:#1A1A18">Output (387)</a> · <a href="gallery-editor.html" style="color:#1A1A18">Éditeur</a> · <a href="index.html" style="color:#1A1A18">← Portfolio</a>`;
+</script>
 <footer style="max-width:1200px;margin:0 auto;padding:20px;text-align:center;font-size:11px;color:#9CA3AF">6 / 54 — voir <code>Image generator/Images générés/</code> pour le reste · <a href="index.html" style="color:#1A1A18">← Portfolio</a></footer>
 </body>
 </html>
