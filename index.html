@@ -32,6 +32,8 @@
 <div class="fog-bg parallax" aria-hidden="true"></div>
 <div class="fog-veil" aria-hidden="true"></div>
 <div class="fog-bloom" aria-hidden="true"></div>
+<!-- Front fog image — calque devant qui cache le portfolio, cercle central transparent qui englobe (voir croquis) -->
+<div class="fog-front-image" aria-hidden="true" style="position:fixed; inset:0; z-index:8; background-image:url('assets/fog-hero-2400.jpg'); background-size:cover; background-position:50% 38%; filter:saturate(0.72) contrast(1.08); -webkit-mask-image:radial-gradient(circle 420px at 50% 38%, transparent 0%, transparent 58%, black 78%); mask-image:radial-gradient(circle 420px at 50% 38%, transparent 0%, transparent 58%, black 78%); pointer-events:none; opacity:0.96"></div>
 <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 bg-white/80 backdrop-blur-2xl border border-black/5 rounded-full px-2 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
   <span class="size-8 rounded-full bg-[#1A1A18] text-white grid place-items-center text-[11px] font-bold">F</span>
   <span class="text-[13px] font-semibold pr-2">Fabien</span>
@@ -154,17 +156,22 @@ document.querySelectorAll('.filter-btn').forEach(b=>{
   });
 });
 render('all');
-// Parallaxe douce — brouillard autour, pas dessus (même plan, papier s'extirpe en glissant)
+// Parallaxe — même plan, portfolio s'extirpe du brouillard (fog devant avec trou circulaire)
 let ticking=false;
 const fogBg=document.querySelector('.fog-bg');
+const fogFrontImg=document.querySelector('.fog-front-image');
 window.addEventListener('scroll',()=>{
   if(ticking) return;
   ticking=true;
   requestAnimationFrame(()=>{
     const y=window.scrollY;
     if(fogBg) fogBg.style.transform=`translateZ(-180px) scale(1.18) translateY(${y*0.06}px)`;
+    if(fogFrontImg) fogFrontImg.style.transform=`translateY(${y*0.03}px)`;
     const sceneEl=document.getElementById('scene');
     if(sceneEl) sceneEl.style.transform=`translateY(${y*-0.015}px)`;
+    // le cercle central reste fixe, l'opacité du voile s'amenuise légèrement au scroll
+    const veil=document.querySelector('.fog-veil');
+    if(veil) veil.style.opacity=String(Math.max(0.55, 1 - y*0.0012));
     ticking=false;
   });
 },{passive:true});
