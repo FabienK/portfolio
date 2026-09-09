@@ -103,14 +103,14 @@
 <script id="DATA" type="application/json">
 {
   "projects": [
-    {"name":"Figma — 14 Design Systems","oneLiner":"14 design systems en tokens CSS → produits shadcn + site vitrine","statut":"prod","cover":"◈","language":"CSS + Node","runtime":"opencode"},
-    {"name":"draw-it + ai-brief","oneLiner":"2 skills multi-agents : dessiner → spécifier (brief IA)","statut":"prod","cover":"✎","language":"HTML + JS vanilla","runtime":"opencode"},
-    {"name":"Projet — Pack V1 Image IA","oneLiner":"Pack Gumroad print photoréaliste (lexique 35p + styles 22p)","statut":"prod","cover":"▣","language":"Python + Typst + Flux","runtime":"opencode"},
-    {"name":"Business — Audit LinkedIn 79€","oneLiner":"Grille 18 critères → score /100","statut":"WIP","cover":"in","language":"Docs + Gumroad","runtime":"opencode"},
-    {"name":"App guitare — Outils guitariste","oneLiner":"PWA Rythme / Chords / Tabs PDF","statut":"WIP","cover":"♫","language":"Vite + React + PWA","runtime":"claude"},
-    {"name":"Blog photo — Prisme","oneLiner":"Blog photo automatisé Flux → Astro → Pages","statut":"prod","cover":"◐","language":"Astro + ComfyUI","runtime":"claude"},
-    {"name":"Encyclo-Nana — Briques","oneLiner":"App ludo-éducative 6e — 204 briques (6 univers)","statut":"prod","cover":"⬢","language":"Next.js + Supabase","runtime":"claude"},
-    {"name":"Image generator — ShowMe5WH","oneLiner":"Backend 300 DPI ComfyUI M4 — source Pack V1","statut":"prod","cover":"⬣","language":"Python + ComfyUI","runtime":"claude"}
+    {"name":"Figma — 14 Design Systems","oneLiner":"14 design systems en tokens CSS → produits shadcn + site vitrine","statut":"prod","cover":"◈","language":"CSS + Node","runtime":"opencode","href":"https://github.com/FabienK/portfolio"},
+    {"name":"draw-it + ai-brief","oneLiner":"2 skills multi-agents : dessiner → spécifier (brief IA)","statut":"prod","cover":"✎","language":"HTML + JS vanilla","runtime":"opencode","href":"https://fabienk.github.io/draw-it/"},
+    {"name":"Projet — Pack V1 Image IA","oneLiner":"Pack Gumroad print photoréaliste (lexique 35p + styles 22p)","statut":"prod","cover":"▣","language":"Python + Typst + Flux","runtime":"opencode","href":"https://github.com/FabienK/portfolio"},
+    {"name":"Business — Audit LinkedIn 79€","oneLiner":"Grille 18 critères → score /100","statut":"WIP","cover":"in","language":"Docs + Gumroad","runtime":"opencode","href":"https://github.com/FabienK/portfolio"},
+    {"name":"App guitare — Outils guitariste","oneLiner":"PWA Rythme / Chords / Tabs PDF","statut":"WIP","cover":"♫","language":"Vite + React + PWA","runtime":"claude","href":"https://github.com/FabienK/outils-guitariste"},
+    {"name":"Blog photo — Prisme","oneLiner":"Blog photo automatisé Flux → Astro → Pages","statut":"prod","cover":"◐","language":"Astro + ComfyUI","runtime":"claude","href":"https://fabienk.github.io/blog-photo/"},
+    {"name":"Encyclo-Nana — Briques","oneLiner":"App ludo-éducative 6e — 204 briques (6 univers)","statut":"prod","cover":"⬢","language":"Next.js + Supabase","runtime":"claude","href":"https://web-steel-mu-60.vercel.app"},
+    {"name":"Image generator — ShowMe5WH","oneLiner":"Backend 300 DPI ComfyUI M4 — source Pack V1","statut":"prod","cover":"⬣","language":"Python + ComfyUI","runtime":"claude","href":"gallery-showme5wh.html"}
   ]
 }
 </script>
@@ -159,9 +159,9 @@ function render(filter='all'){
               <span style="width:8px;height:8px; border-radius:50%; background:${accent.dot}; flex-shrink:0" aria-hidden="true"></span>
             </div>
             <p style="margin:12px 0 0; font-size:13px; line-height:1.5; color:#374151; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden">${p.oneLiner}</p>
-            <div style="margin-top:14px; display:inline-flex; align-items:center; gap:8px; background:#1F2937; color:#fff; border-radius:999px; padding:8px 16px; font-size:12px; font-weight:700">
+            <a href="${p.href||'#'}" target="_blank" rel="noopener" style="margin-top:14px; display:inline-flex; align-items:center; gap:8px; background:#1F2937; color:#fff; border-radius:999px; padding:8px 16px; font-size:12px; font-weight:700; text-decoration:none">
               Découvrir <span style="width:20px;height:20px; border-radius:50%; background:rgba(255,255,255,0.2); display:grid; place-items:center; font-size:12px">↗</span>
-            </div>
+            </a>
           </div>
         </div>
         <div style="display:flex; gap:8px; padding:12px 8px 4px; align-items:center">
