@@ -26,23 +26,34 @@
   <h1>ShowMe5WH — Galerie</h1>
   <p class="sub">6 images sur 54 — Flux schnell 1216×832 → 2048×1400 · lexique 34 + styles 20 · <a href="https://github.com/FabienK/Image-generator" target="_blank" style="color:#1A1A18">Image-generator →</a></p>
 </header>
-<div style="text-align:center; margin:12px 0">
-  <button onclick="localStorage.removeItem('comfy:sel');localStorage.removeItem('showme5wh:selection');location.reload()" style="font-size:11px; color:#6B7280; background:#fff; border:1px solid #E8E6E1; border-radius:999px; padding:6px 12px; cursor:pointer">↺ Revenir aux 6 du départ</button>
+<div style="text-align:center; margin:12px 0; display:flex; gap:8px; justify-content:center; flex-wrap:wrap">
+  <a href="gallery-output.html" style="font-size:11px; color:#fff; background:#1A1A18; border-radius:999px; padding:8px 14px; text-decoration:none; font-weight:600">+ Ajouter depuis Output (387)</a>
+  <a href="gallery-editor.html" style="font-size:11px; color:#1A1A18; background:#fff; border:1px solid #E8E6E1; border-radius:999px; padding:8px 14px; text-decoration:none; font-weight:600">Éditeur 54</a>
+  <button onclick="localStorage.removeItem('comfy:sel');localStorage.removeItem('showme5wh:selection');location.reload()" style="font-size:11px; color:#6B7280; background:#fff; border:1px solid #E8E6E1; border-radius:999px; padding:8px 14px; cursor:pointer">↺ Revenir aux 6 du départ</button>
 </div>
 <div class="grid" id="grid"></div>
 <script>
 const fallback = ["01-plongee.jpg","12-teleobjectif.jpg","18-trois-points.jpg","02-photorealiste.jpg","07-3d-render.jpg","09-cyberpunk.jpg"];
-const sel = JSON.parse(localStorage.getItem('comfy:sel')||'null') || JSON.parse(localStorage.getItem('showme5wh:selection')||'null') || fallback;
-console.log('Galerie ShowMe5WH — sel', sel);
+let sel = JSON.parse(localStorage.getItem('comfy:sel')||'null') || JSON.parse(localStorage.getItem('showme5wh:selection')||'null') || [...fallback];
 const grid=document.getElementById('grid');
 function isComfy(f){ return f.startsWith('4w1h_') || f.startsWith('3drender') || f.startsWith('encyclo') || f.includes('flux'); }
-grid.innerHTML = sel.map(f=>{
-  const src = isComfy(f) ? `assets/comfy-output/${f}` : `assets/showme5wh/${f}`;
-  const label = f.replace('.jpg','').replace('.png','');
-  return `<div class="card"><img src="${src}" alt="${label}" loading="lazy" onerror="this.src='https://picsum.photos/seed/${encodeURIComponent(f)}/600/400'"><div class="meta"><h3>${label}</h3><p>${f}</p></div></div>`;
-}).join('');
-document.querySelector('header p.sub').innerHTML = `${sel.length} images — Flux schnell 1216×832 → 2048×1400 · <a href="gallery-output.html" style="color:#1A1A18">← Choisir dans Output (387)</a> · <a href="gallery-editor.html" style="color:#1A1A18">Éditeur 54</a>`;
-document.querySelector('footer').innerHTML = `${sel.length} / 54 — <a href="gallery-output.html" style="color:#1A1A18">Output (387)</a> · <a href="gallery-editor.html" style="color:#1A1A18">Éditeur</a> · <a href="index.html" style="color:#1A1A18">← Portfolio</a>`;
+function saveAndRender(){
+  localStorage.setItem('comfy:sel', JSON.stringify(sel));
+  localStorage.setItem('showme5wh:selection', JSON.stringify(sel));
+  render();
+}
+function render(){
+  grid.innerHTML = sel.map((f,idx)=>{
+    const src = isComfy(f) ? `assets/comfy-output/${f}` : `assets/showme5wh/${f}`;
+    const label = f.replace('.jpg','').replace('.png','');
+    return `<div class="card" style="position:relative"><button onclick="removeAt(${idx})" style="position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.65);color:#fff;border:1px solid rgba(255,255,255,0.3);display:grid;place-items:center;font-size:14px;cursor:pointer;z-index:1" title="Retirer">×</button><img src="${src}" alt="${label}" loading="lazy" onerror="this.src='https://picsum.photos/seed/${encodeURIComponent(f)}/600/400'"><div class="meta"><h3>${label}</h3><p>${f}</p></div></div>`;
+  }).join('');
+  document.querySelector('header p.sub').innerHTML = `${sel.length} images — Flux schnell 1216×832 → 2048×1400 · <a href="gallery-output.html" style="color:#1A1A18">← Choisir dans Output (387)</a> · <a href="gallery-editor.html" style="color:#1A1A18">Éditeur 54</a>`;
+  const foot=document.querySelector('footer');
+  if(foot) foot.innerHTML = `${sel.length} / 54 — <a href="gallery-output.html" style="color:#1A1A18">Output (387)</a> · <a href="gallery-editor.html" style="color:#1A1A18">Éditeur</a> · <a href="index.html" style="color:#1A1A18">← Portfolio</a> — <span style="color:#6B7280">clique × pour retirer</span>`;
+}
+function removeAt(i){ sel.splice(i,1); saveAndRender(); }
+render();
 </script>
 <footer style="max-width:1200px;margin:0 auto;padding:20px;text-align:center;font-size:11px;color:#9CA3AF">6 / 54 — voir <code>Image generator/Images générés/</code> pour le reste · <a href="index.html" style="color:#1A1A18">← Portfolio</a></footer>
 </body>
