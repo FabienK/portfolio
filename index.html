@@ -12,11 +12,14 @@
 <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','system-ui'],display:['Instrument Serif','Georgia','serif']}}}}</script>
 <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/dist/phosphor.js"></script>
 <style>
-  body{color:#1A1A18;font-family:'Plus Jakarta Sans',system-ui,sans-serif; background:#E8E6E1}
-  .fog-bg{position:fixed; inset:0; z-index:-2; background-color:#E8E6E1; background-image:url('assets/fog-hero-2400.jpg'); background-size:cover; background-position:50% 38%; filter:saturate(0.65) contrast(1.05) brightness(1.02)}
-  .fog-veil{position:fixed; inset:0; z-index:-1; background:linear-gradient(to bottom, rgba(253,251,247,0.48), rgba(253,251,247,0.76)); -webkit-mask-image:radial-gradient(ellipse 68% 58% at 33% 38%, transparent 42%, black 78%); mask-image:radial-gradient(ellipse 68% 58% at 33% 38%, transparent 42%, black 78%)}
-  .fog-bloom{position:fixed; inset:0; z-index:-1; background:radial-gradient(ellipse 520px 380px at 33% 38%, rgba(255,255,255,0.92) 0%, transparent 62%); mix-blend-mode:screen; pointer-events:none}
-  .paper{position:relative; background:#FFFEFB; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.04'/%3E%3C/svg%3E"); box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 16px 48px rgba(26,26,24,0.10), 0 2px 8px rgba(26,26,24,0.06); border:1px solid rgba(26,26,24,0.06)}
+  body{color:#1A1A18;font-family:'Plus Jakarta Sans',system-ui,sans-serif; background:#E8E6E1; overflow-x:hidden}
+  .scene{position:relative; perspective:1200px; perspective-origin:50% 18%; transform-style:preserve-3d}
+  .fog-bg{position:fixed; inset:0; z-index:-2; background-color:#E8E6E1; background-image:url('assets/fog-hero-2400.jpg'); background-size:cover; background-position:50% 38%; filter:saturate(0.65) contrast(1.05) brightness(1.02); transform:translateZ(-180px) scale(1.18); will-change:transform}
+  .fog-veil{position:fixed; inset:0; z-index:-1; background:linear-gradient(to bottom, rgba(253,251,247,0.52), rgba(253,251,247,0.78)); -webkit-mask-image:radial-gradient(ellipse 68% 58% at 33% 38%, transparent 38%, black 74%); mask-image:radial-gradient(ellipse 68% 58% at 33% 38%, transparent 38%, black 74%)}
+  .fog-front{position:fixed; inset:0; z-index:5; background:radial-gradient(ellipse 900px 520px at 33% 28%, rgba(253,251,247,0.88) 0%, rgba(253,251,247,0.55) 38%, transparent 72%); pointer-events:none; opacity:0.92; transition:opacity 900ms cubic-bezier(0.32,0.72,0,1)}
+  .fog-front.cleared{opacity:0}
+  .paper{position:relative; background:#FFFEFB; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.04'/%3E%3C/svg%3E"); box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 16px 48px rgba(26,26,24,0.10), 0 2px 8px rgba(26,26,24,0.06); border:1px solid rgba(26,26,24,0.06); transform:translateZ(0); will-change:transform}
+  .parallax{will-change:transform}
   .display{font-family:'Instrument Serif',Georgia,serif; text-wrap:balance}
   .grain::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:0.02;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
   .bezel-outer{background:rgba(26,26,24,0.03);border:1px solid rgba(26,26,24,0.05);padding:7px;border-radius:2rem; backdrop-filter:blur(2px)}
@@ -27,9 +30,10 @@
 </style>
 </head>
 <body class="grain">
-<div class="fog-bg" aria-hidden="true"></div>
+<div class="fog-bg parallax" aria-hidden="true"></div>
 <div class="fog-veil" aria-hidden="true"></div>
 <div class="fog-bloom" aria-hidden="true"></div>
+<div class="fog-front" aria-hidden="true"></div>
 <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 bg-white/80 backdrop-blur-2xl border border-black/5 rounded-full px-2 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
   <span class="size-8 rounded-full bg-[#1A1A18] text-white grid place-items-center text-[11px] font-bold">F</span>
   <span class="text-[13px] font-semibold pr-2">Fabien</span>
@@ -37,8 +41,9 @@
   <a href="#contact" class="hidden sm:inline text-[12px] font-medium px-3 py-1 rounded-full hover:bg-black/5">Contact</a>
   <a href="https://github.com/FabienK" target="_blank" class="ml-1 bg-[#1A1A18] text-white rounded-full px-4 py-1.5 text-[12px] font-semibold">GitHub ↗</a>
 </nav>
+<div class="scene" id="scene">
 
-<header class="pt-24 pb-10 px-4 max-w-[1200px] mx-auto">
+<header class="pt-24 pb-10 px-4 max-w-[1200px] mx-auto parallax">
   <div class="bezel-outer paper">
     <div class="bezel-inner paper px-6 sm:px-8 py-8 sm:py-10 relative overflow-hidden">
       <div class="relative z-10">
@@ -78,6 +83,7 @@
   </footer>
 </main>
 
+</div>
 <script id="DATA" type="application/json">
 {
   "projects": [
@@ -150,6 +156,25 @@ document.querySelectorAll('.filter-btn').forEach(b=>{
   });
 });
 render('all');
+// Same-plane fog: portfolio s'extirpe, même plan que le brouillard
+let ticking=false;
+const fogBg=document.querySelector('.fog-bg');
+const fogFront=document.querySelector('.fog-front');
+window.addEventListener('scroll',()=>{
+  if(ticking) return;
+  ticking=true;
+  requestAnimationFrame(()=>{
+    const y=window.scrollY;
+    if(fogBg) fogBg.style.transform=`translateZ(-180px) scale(1.18) translateY(${y*0.08}px)`;
+    const sceneEl=document.getElementById('scene');
+    if(sceneEl) sceneEl.style.transform=`translateY(${y*-0.02}px)`;
+    if(fogFront){
+      if(y>40) fogFront.classList.add('cleared');
+      else fogFront.classList.remove('cleared');
+    }
+    ticking=false;
+  });
+},{passive:true});
 </script>
 </body>
 </html>
