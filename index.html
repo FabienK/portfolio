@@ -96,22 +96,33 @@ function render(filter='all'){
     return p.runtime===filter;
   });
   list.forEach((p,i)=>{
-    const featured = i===0;
-    const span = featured ? 'col-span-12 lg:col-span-8' : 'col-span-12 sm:col-span-6 lg:col-span-4';
+    const span = i===0 ? 'col-span-12 lg:col-span-8' : 'col-span-12 sm:col-span-6 lg:col-span-4';
     const el=document.createElement('div');
-    el.className=`bezel-outer reveal ${span}`;
+    el.className=`reveal ${span}`;
     el.style.transitionDelay=(i*40)+'ms';
+    const toneBg = p.statut==='prod' ? '#ECFDF5' : p.statut==='WIP' ? '#FEF3C7' : '#F3F4F6';
+    const toneColor = p.statut==='prod' ? '#065F46' : p.statut==='WIP' ? '#92400E' : '#475569';
     el.innerHTML=`
-      <div class="bezel-inner p-6 flex flex-col gap-3 ${featured?'min-h-[280px]':''}">
-        <div class="flex items-center justify-between">
-          <span class="size-10 rounded-full bg-[#FDFBF7] border border-black/5 grid place-items-center text-lg">${p.cover}</span>
-          <span class="text-[10px] font-bold tracking-widest uppercase rounded-full px-2.5 py-1 border ${tone[p.statut]||tone.vide}">${p.statut}</span>
+      <div style="background:#fff; border:1px solid #E8E6E1; border-radius:32px; padding:6px; box-shadow:0 12px 32px rgba(26,26,24,0.06)">
+        <div style="background:#FFFBEB; border:1px solid #FDE68A; border-radius:24px; padding:20px; position:relative; overflow:hidden">
+          <div style="position:absolute; top:-20px; right:-20px; width:80px; height:80px; background:#FDE68A; border-radius:50%; opacity:0.5"></div>
+          <div style="position:relative">
+            <div style="display:flex; gap:10px; align-items:center">
+              <div style="width:48px;height:48px; border-radius:16px; background:#fff; border:1px solid #FDE68A; display:grid; place-items:center; font-size:22px; box-shadow:0 2px 8px rgba(0,0,0,0.06)">${p.cover}</div>
+              <div style="min-width:0; flex:1">
+                <div style="font-size:13px; font-weight:700; color:#92400E; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${p.name}</div>
+                <div style="font-size:11px; color:#B45309">${p.language} · ${p.runtime}</div>
+              </div>
+            </div>
+            <p style="margin:12px 0 0; font-size:13px; line-height:1.5; color:#78350F; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden">${p.oneLiner}</p>
+            <div style="margin-top:14px; display:inline-flex; align-items:center; gap:8px; background:#92400E; color:#fff; border-radius:999px; padding:8px 16px; font-size:12px; font-weight:700">
+              Découvrir <span style="width:20px;height:20px; border-radius:50%; background:rgba(255,255,255,0.2); display:grid; place-items:center; font-size:12px">↗</span>
+            </div>
+          </div>
         </div>
-        <h3 class="display text-[18px] font-bold leading-tight">${p.name}</h3>
-        <p class="text-[13px] leading-snug text-muted pretty">${p.oneLiner}</p>
-        <div class="mt-auto pt-3 flex items-center gap-2 text-[11px] text-muted">
-          <span class="px-2 py-1 rounded-full bg-black/[0.04]">${p.language||'—'}</span>
-          <span>· ${p.runtime}</span>
+        <div style="display:flex; gap:8px; padding:12px 8px 4px; align-items:center">
+          <span style="font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; background:${toneBg}; color:${toneColor}; border-radius:999px; padding:4px 10px">${p.statut}</span>
+          <span style="font-size:11px; color:#9CA3AF">Mis à jour 08/09</span>
         </div>
       </div>`;
     grid.appendChild(el);
