@@ -112,6 +112,17 @@ function render(filter='all'){
     if(filter==='prod'||filter==='WIP') return p.statut===filter;
     return p.runtime===filter;
   });
+  // pointes de couleur discrètes — gris reste base, accent en liseré + pastille cover
+  const accentMap={
+    "Figma — 14 Design Systems":{bg:"#F5F3FF",bd:"#DDD6FE",dot:"#8B5CF6",left:"#8B5CF6"},
+    "draw-it + ai-brief":{bg:"#EFF6FF",bd:"#BFDBFE",dot:"#3B82F6",left:"#3B82F6"},
+    "Projet — Pack V1 Image IA":{bg:"#FFFBEB",bd:"#FDE68A",dot:"#F59E0B",left:"#F59E0B"},
+    "Business — Audit LinkedIn 79€":{bg:"#F8FAFC",bd:"#E2E8F0",dot:"#64748B",left:"#64748B"},
+    "App guitare — Outils guitariste":{bg:"#FFF1F2",bd:"#FECDD3",dot:"#F43F5E",left:"#F43F5E"},
+    "Blog photo — Prisme":{bg:"#F0FDF4",bd:"#BBF7D0",dot:"#10B981",left:"#10B981"},
+    "Encyclo-Nana — Briques":{bg:"#FFF7ED",bd:"#FED7AA",dot:"#F97316",left:"#F97316"},
+    "Image generator — ShowMe5WH":{bg:"#ECFEFF",bd:"#A5F3FC",dot:"#06B6D4",left:"#06B6D4"}
+  };
   list.forEach((p,i)=>{
     const span = i===0 ? 'col-span-12 lg:col-span-8' : 'col-span-12 sm:col-span-6 lg:col-span-4';
     const el=document.createElement('div');
@@ -119,17 +130,19 @@ function render(filter='all'){
     el.style.transitionDelay=(i*40)+'ms';
     const toneBg = p.statut==='prod' ? '#ECFDF5' : p.statut==='WIP' ? '#FEF3C7' : '#F3F4F6';
     const toneColor = p.statut==='prod' ? '#065F46' : p.statut==='WIP' ? '#92400E' : '#475569';
-     el.innerHTML=`
+    const accent = accentMap[p.name] || {bg:"#F3F4F6",bd:"#D1D5DB",dot:"#9CA3AF",left:"#D1D5DB"};
+    el.innerHTML=`
       <div style="background:#fff; border:1px solid #E8E6E1; border-radius:32px; padding:6px; box-shadow:0 12px 32px rgba(26,26,24,0.06)">
-        <div style="background:#F3F4F6; border:1px solid #D1D5DB; border-radius:24px; padding:20px; position:relative; overflow:hidden">
-          <div style="position:absolute; top:-20px; right:-20px; width:80px; height:80px; background:#D1D5DB; border-radius:50%; opacity:0.45"></div>
+        <div style="background:${accent.bg}; border:1px solid ${accent.bd}; border-left:3px solid ${accent.left}; border-radius:24px; padding:20px; position:relative; overflow:hidden">
+          <div style="position:absolute; top:-20px; right:-20px; width:80px; height:80px; background:${accent.bd}; border-radius:50%; opacity:0.28"></div>
           <div style="position:relative">
             <div style="display:flex; gap:10px; align-items:center">
-              <div style="width:48px;height:48px; border-radius:16px; background:#fff; border:1px solid #D1D5DB; display:grid; place-items:center; font-size:22px; box-shadow:0 2px 8px rgba(0,0,0,0.06)">${p.cover}</div>
+              <div style="width:48px;height:48px; border-radius:16px; background:#fff; border:1px solid ${accent.bd}; display:grid; place-items:center; font-size:22px; box-shadow:0 2px 8px rgba(0,0,0,0.06)">${p.cover}</div>
               <div style="min-width:0; flex:1">
                 <div style="font-size:13px; font-weight:700; color:#1F2937; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${p.name}</div>
                 <div style="font-size:11px; color:#6B7280">${p.language} · ${p.runtime}</div>
               </div>
+              <span style="width:8px;height:8px; border-radius:50%; background:${accent.dot}; flex-shrink:0" aria-hidden="true"></span>
             </div>
             <p style="margin:12px 0 0; font-size:13px; line-height:1.5; color:#374151; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden">${p.oneLiner}</p>
             <div style="margin-top:14px; display:inline-flex; align-items:center; gap:8px; background:#1F2937; color:#fff; border-radius:999px; padding:8px 16px; font-size:12px; font-weight:700">
