@@ -121,18 +121,18 @@ function render(filter='all'){
     const toneColor = p.statut==='prod' ? '#065F46' : p.statut==='WIP' ? '#92400E' : '#475569';
      el.innerHTML=`
       <div style="background:#fff; border:1px solid #E8E6E1; border-radius:32px; padding:6px; box-shadow:0 12px 32px rgba(26,26,24,0.06)">
-        <div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:24px; padding:20px; position:relative; overflow:hidden">
-          <div style="position:absolute; top:-20px; right:-20px; width:80px; height:80px; background:#A7F3D0; border-radius:50%; opacity:0.45"></div>
+        <div style="background:#E0E7FF; border:1px solid #A5B4FC; border-radius:24px; padding:20px; position:relative; overflow:hidden">
+          <div style="position:absolute; top:-20px; right:-20px; width:80px; height:80px; background:#A5B4FC; border-radius:50%; opacity:0.45"></div>
           <div style="position:relative">
             <div style="display:flex; gap:10px; align-items:center">
-              <div style="width:48px;height:48px; border-radius:16px; background:#fff; border:1px solid #A7F3D0; display:grid; place-items:center; font-size:22px; box-shadow:0 2px 8px rgba(0,0,0,0.06)">${p.cover}</div>
+              <div style="width:48px;height:48px; border-radius:16px; background:#fff; border:1px solid #A5B4FC; display:grid; place-items:center; font-size:22px; box-shadow:0 2px 8px rgba(0,0,0,0.06)">${p.cover}</div>
               <div style="min-width:0; flex:1">
-                <div style="font-size:13px; font-weight:700; color:#065F46; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${p.name}</div>
-                <div style="font-size:11px; color:#047857">${p.language} · ${p.runtime}</div>
+                <div style="font-size:13px; font-weight:700; color:#3730A3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">${p.name}</div>
+                <div style="font-size:11px; color:#4338CA">${p.language} · ${p.runtime}</div>
               </div>
             </div>
-            <p style="margin:12px 0 0; font-size:13px; line-height:1.5; color:#064E3B; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden">${p.oneLiner}</p>
-            <div style="margin-top:14px; display:inline-flex; align-items:center; gap:8px; background:#065F46; color:#fff; border-radius:999px; padding:8px 16px; font-size:12px; font-weight:700">
+            <p style="margin:12px 0 0; font-size:13px; line-height:1.5; color:#312E81; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden">${p.oneLiner}</p>
+            <div style="margin-top:14px; display:inline-flex; align-items:center; gap:8px; background:#3730A3; color:#fff; border-radius:999px; padding:8px 16px; font-size:12px; font-weight:700">
               Découvrir <span style="width:20px;height:20px; border-radius:50%; background:rgba(255,255,255,0.2); display:grid; place-items:center; font-size:12px">↗</span>
             </div>
           </div>
