@@ -32,8 +32,10 @@
 <div class="fog-bg parallax" aria-hidden="true"></div>
 <div class="fog-veil" aria-hidden="true"></div>
 <div class="fog-bloom" aria-hidden="true"></div>
-<!-- Front fog image — calque devant qui cache le portfolio, cercle central transparent qui englobe (voir croquis) -->
-<div class="fog-front-image" aria-hidden="true" style="position:fixed; inset:0; z-index:8; background-image:url('assets/fog-hero-2400.jpg'); background-size:cover; background-position:50% 38%; filter:saturate(0.72) contrast(1.08); -webkit-mask-image:radial-gradient(circle 420px at 50% 38%, transparent 0%, transparent 58%, black 78%); mask-image:radial-gradient(circle 420px at 50% 38%, transparent 0%, transparent 58%, black 78%); pointer-events:none; opacity:0.96"></div>
+<!-- Front fog image — 3 calques pour linéarité sans cassure, cercle englobant (voir croquis) -->
+<div class="fog-front-image" aria-hidden="true" style="position:fixed; inset:0; z-index:8; background-image:url('assets/fog-hero-2400.jpg'); background-size:cover; background-position:50% 38%; filter:saturate(0.72) contrast(1.08); -webkit-mask-image:radial-gradient(circle 760px at 50% 38%, transparent 0% 48%, rgba(0,0,0,0.14) 56%, rgba(0,0,0,0.34) 64%, rgba(0,0,0,0.62) 72%, rgba(0,0,0,0.86) 80%, black 88%); mask-image:radial-gradient(circle 760px at 50% 38%, transparent 0% 48%, rgba(0,0,0,0.14) 56%, rgba(0,0,0,0.34) 64%, rgba(0,0,0,0.62) 72%, rgba(0,0,0,0.86) 80%, black 88%); pointer-events:none; opacity:0.88"></div>
+<div class="fog-front-image-2" aria-hidden="true" style="position:fixed; inset:0; z-index:8; background-image:url('assets/fog-hero-2400.jpg'); background-size:cover; background-position:50% 38%; filter:saturate(0.62) contrast(1.04) brightness(1.06); -webkit-mask-image:radial-gradient(circle 820px at 50% 38%, transparent 0% 52%, rgba(0,0,0,0.08) 60%, rgba(0,0,0,0.22) 68%, rgba(0,0,0,0.48) 76%, rgba(0,0,0,0.72) 84%, black 92%); mask-image:radial-gradient(circle 820px at 50% 38%, transparent 0% 52%, rgba(0,0,0,0.08) 60%, rgba(0,0,0,0.22) 68%, rgba(0,0,0,0.48) 76%, rgba(0,0,0,0.72) 84%, black 92%); pointer-events:none; opacity:0.42"></div>
+<div class="fog-front-image-3" aria-hidden="true" style="position:fixed; inset:0; z-index:8; background-image:url('assets/fog-hero-2400.jpg'); background-size:cover; background-position:50% 38%; filter:saturate(0.58) contrast(1.02) brightness(1.08); -webkit-mask-image:radial-gradient(circle 880px at 50% 38%, transparent 0% 58%, rgba(0,0,0,0.06) 66%, rgba(0,0,0,0.16) 74%, rgba(0,0,0,0.32) 82%, black 92%); mask-image:radial-gradient(circle 880px at 50% 38%, transparent 0% 58%, rgba(0,0,0,0.06) 66%, rgba(0,0,0,0.16) 74%, rgba(0,0,0,0.32) 82%, black 92%); pointer-events:none; opacity:0.22"></div>
 <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 bg-white/80 backdrop-blur-2xl border border-black/5 rounded-full px-2 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
   <span class="size-8 rounded-full bg-[#1A1A18] text-white grid place-items-center text-[11px] font-bold">F</span>
   <span class="text-[13px] font-semibold pr-2">Fabien</span>
@@ -156,22 +158,21 @@ document.querySelectorAll('.filter-btn').forEach(b=>{
   });
 });
 render('all');
-// Parallaxe — même plan, portfolio s'extirpe du brouillard (fog devant avec trou circulaire)
+// Parallaxe — 3 calques pour linéarité sans cassure, même plan
 let ticking=false;
 const fogBg=document.querySelector('.fog-bg');
-const fogFrontImg=document.querySelector('.fog-front-image');
+const fogLayers=document.querySelectorAll('.fog-front-image, .fog-front-image-2, .fog-front-image-3');
 window.addEventListener('scroll',()=>{
   if(ticking) return;
   ticking=true;
   requestAnimationFrame(()=>{
     const y=window.scrollY;
     if(fogBg) fogBg.style.transform=`translateZ(-180px) scale(1.18) translateY(${y*0.06}px)`;
-    if(fogFrontImg) fogFrontImg.style.transform=`translateY(${y*0.03}px)`;
+    fogLayers.forEach((el,i)=>{ el.style.transform=`translateY(${y*(0.02 + i*0.008)}px)`; });
     const sceneEl=document.getElementById('scene');
     if(sceneEl) sceneEl.style.transform=`translateY(${y*-0.015}px)`;
-    // le cercle central reste fixe, l'opacité du voile s'amenuise légèrement au scroll
     const veil=document.querySelector('.fog-veil');
-    if(veil) veil.style.opacity=String(Math.max(0.55, 1 - y*0.0012));
+    if(veil) veil.style.opacity=String(Math.max(0.45, 1 - y*0.001));
     ticking=false;
   });
 },{passive:true});
