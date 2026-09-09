@@ -38,11 +38,16 @@ function clearAll(){selected.clear();localStorage.removeItem('comfy:sel');render
 async function addToGallery(){
   if(selected.size===0){alert('Sélectionne au moins 1');return;}
   const list=[...selected];
-  // Copy via fetch to a helper endpoint? For file:// we just show the cp commands and let user run them
+  // Sauve pour la galerie ShowMe5WH — les 2 clés pour compatibilité, showme5wh prioritaire
+  localStorage.setItem('showme5wh:selection', JSON.stringify(list));
+  localStorage.setItem('comfy:sel', JSON.stringify(list));
+  // Pour GitHub Pages (besoin de vrais fichiers dans assets/showme5wh), on propose aussi les cp
   const cmds=list.map(f=>`cp "assets/comfy-output/${f}" "assets/showme5wh/${f}"`).join('\n');
-  const ok=confirm(list.length+' images sélectionnées:\n'+list.slice(0,5).join('\n')+(list.length>5?'\n...':'')+'\n\nCopier les commandes cp dans le presse-papier et ouvrir un terminal pour les exécuter ?');
-  if(ok){
-    try{await navigator.clipboard.writeText(cmds); alert('Commandes copiées — colle dans ton terminal (Projet opencode/Agents/portfolio) puis refresh gallery-showme5wh.html');}catch{alert(cmds)}
+  const go = confirm(list.length+' images sélectionnées — voir la galerie maintenant ?\n\nOK = ouvrir gallery-showme5wh.html (preview instantanée)\nAnnuler = juste copier les commandes cp pour Pages');
+  if(go){
+    window.open('gallery-showme5wh.html','_blank');
+  } else {
+    try{await navigator.clipboard.writeText(cmds); alert('Commandes cp copiées — colle dans ton terminal puis git add/push pour Pages');}catch{alert(cmds)}
   }
 }
 render();

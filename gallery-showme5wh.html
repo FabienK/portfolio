@@ -34,7 +34,7 @@
 <div class="grid" id="grid"></div>
 <script>
 const fallback = ["01-plongee.jpg","12-teleobjectif.jpg","18-trois-points.jpg","02-photorealiste.jpg","07-3d-render.jpg","09-cyberpunk.jpg"];
-let sel = JSON.parse(localStorage.getItem('comfy:sel')||'null') || JSON.parse(localStorage.getItem('showme5wh:selection')||'null') || [...fallback];
+let sel = JSON.parse(localStorage.getItem('showme5wh:selection')||'null') || JSON.parse(localStorage.getItem('comfy:sel')||'null') || [...fallback];
 const grid=document.getElementById('grid');
 function isComfy(f){ return f.startsWith('4w1h_') || f.startsWith('3drender') || f.startsWith('encyclo') || f.includes('flux'); }
 function saveAndRender(){
