@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Éditeur Galerie — ShowMe5WH</title>
+<style>
+  body{margin:0;background:#FDFBF7;color:#1A1A18;font-family:system-ui,sans-serif;padding:20px}
+  h1{font-size:18px;margin:0 0 8px} p{font-size:12px;color:#6B7280;margin:0 0 16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+  .thumb{position:relative;border:2px solid transparent;border-radius:12px;overflow:hidden;cursor:pointer;background:#fff}
+  .thumb.selected{border-color:#1A1A18;box-shadow:0 0 0 2px #1A1A18}
+  .thumb img{width:100%;height:140px;object-fit:cover;display:block}
+  .thumb .label{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.65);color:#fff;font-size:10px;padding:4px 6px;text-align:center}
+  .thumb .check{position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;background:#fff;border:1px solid #E5E7EB;display:grid;place-items:center;font-size:12px;opacity:0}
+  .thumb.selected .check{opacity:1;background:#1A1A18;color:#fff;border-color:#1A1A18}
+  .bar{position:sticky;bottom:0;background:#fff;border-top:1px solid #E5E7EB;padding:12px 20px;display:flex;gap:10px;justify-content:space-between;align-items:center;margin:20px -20px -20px}
+  .btn{border:0;border-radius:999px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer}
+  .btn-primary{background:#1A1A18;color:#fff}
+  .btn-secondary{background:#fff;border:1px solid #E5E7EB}
+  .count{font-size:12px;color:#6B7280}
+</style>
+</head>
+<body>
+<h1>Choisir tes photos ShowMe5WH</h1>
+<p>54 dispos (34 lexique perspectives_print + 20 styles-starter). Clique pour sélectionner — génère <code>gallery-showme5wh.html</code></p>
+<div class="grid" id="grid"></div>
+<div class="bar">
+  <span class="count" id="count">0 sélectionnées</span>
+  <div style="display:flex;gap:8px">
+    <button class="btn btn-secondary" onclick="clearAll()">Tout désélectionner</button>
+    <button class="btn btn-primary" onclick="generate()">Générer la galerie →</button>
+  </div>
+</div>
+<script>
+const perspectives = [
+ "01-plongee.jpg","01-plongee-naive.jpg","02-contre-plongee.jpg","03-eye-level.jpg","04-birds-eye.jpg","05-worms-eye.jpg","06-champ-contrechamp.jpg","07-trois-quarts.jpg","08-profil.jpg","09-grand-angle.jpg","10-ultra-grand-angle.jpg","11-fisheye.jpg","12-teleobjectif.jpg","12-teleobjectif-naive.jpg","13-standard-50mm.jpg","14-point-de-fuite.jpg","15-ligne-de-fuite.jpg","16-un-point.jpg","17-deux-points.jpg","18-trois-points.jpg","19-atmospherique.jpg","20-ligne-horizon.jpg","21-symetrie-centrale.jpg","22-regle-des-tiers.jpg","22-tiers-naive.jpg","23-cadrage-serre.jpg","24-cadrage-large.jpg","25-faible-pdc.jpg","26-grande-pdc.jpg","27-bokeh.jpg","28-travelling.jpg","29-zoom.jpg","30-pan.jpg","31-tilt.jpg","32-contre-jour.jpg","33-clair-obscur.jpg","34-lumiere-rasante.jpg"
+];
+const styles = [
+ "01-bande-dessinee.jpg","02-photorealiste.jpg","03-anime.jpg","04-peinture-huile.jpg","05-aquarelle.jpg","06-pixel-art.jpg","07-3d-render.jpg","08-croquis-crayon.jpg","09-cyberpunk.jpg","10-fantasy-medieval.jpg","11-nb-argentique.jpg","12-pop-art.jpg","13-minimaliste-vectoriel.jpg","14-surrealiste.jpg","15-steampunk.jpg","16-gothique.jpg","17-art-nouveau.jpg","18-cartoon.jpg","19-isometrique.jpg","20-impressionniste.jpg"
+];
+const all = [
+  ...perspectives.map(f=>({file:f, folder:"perspectives_print", label:f.replace(".jpg","")})),
+  ...styles.map(f=>({file:f, folder:"styles-starter", label:f.replace(".jpg","")}))
+];
+const selected = new Set(JSON.parse(localStorage.getItem("showme5wh:selection")||'["01-plongee.jpg","12-teleobjectif.jpg","18-trois-points.jpg","02-photorealiste.jpg","07-3d-render.jpg","09-cyberpunk.jpg"]'));
+const grid=document.getElementById('grid');
+const countEl=document.getElementById('count');
+function render(){
+  grid.innerHTML='';
+  all.forEach(item=>{
+    const isSel = selected.has(item.file);
+    const div=document.createElement('div');
+    div.className='thumb'+(isSel?' selected':'');
+    // Use local portfolio assets for already copied 6, fallback to placeholder for others
+    const known = ["01-plongee.jpg","12-teleobjectif.jpg","18-trois-points.jpg","02-photorealiste.jpg","07-3d-render.jpg","09-cyberpunk.jpg"];
+    const src = known.includes(item.file) ? `assets/showme5wh/${item.file}` : `https://picsum.photos/seed/${item.file}/400/300`;
+    div.innerHTML=`<img src="${src}" loading="lazy" onerror="this.src='https://picsum.photos/seed/fallback/400/300'"><div class="label">${item.label}</div><div class="check">✓</div>`;
+    div.onclick=()=>{ if(selected.has(item.file)) selected.delete(item.file); else selected.add(item.file); localStorage.setItem("showme5wh:selection", JSON.stringify([...selected])); render(); updateCount(); };
+    grid.appendChild(div);
+  });
+  updateCount();
+}
+function updateCount(){ countEl.textContent = selected.size + " sélectionnée" + (selected.size>1?'s':''); }
+function clearAll(){ selected.clear(); localStorage.removeItem("showme5wh:selection"); render(); }
+function generate(){
+  const list=[...selected];
+  if(list.length===0){ alert("Sélectionne au moins 1 photo"); return; }
+  // Build gallery HTML and copy to clipboard + download
+  const gallery = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>Galerie ShowMe5WH</title><style>body{margin:0;background:#FDFBF7;font-family:system-ui;padding:20px} h1{font-size:18px} .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px} .card{background:#fff;border:1px solid #E8E6E1;border-radius:16px;overflow:hidden} .card img{width:100%;height:220px;object-fit:cover} .meta{padding:12px;font-size:12px} </style></head><body><h1>ShowMe5WH — ${list.length} photos</h1><div class="grid">` + list.map(f=>`<div class="card"><img src="assets/showme5wh/${f}" loading="lazy"><div class="meta">${f}</div></div>`).join('') + `</div></body></html>`;
+  const blob=new Blob([gallery],{type:'text/html'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='gallery-showme5wh.html'; a.click();
+  // Also copy list for manual cp
+  const cpCmd = list.map(f=>{
+    const folder = perspectives.includes(f) ? "perspectives_print" : "styles-starter";
+    return `cp "/Users/fabien_1/Documents/Projets Claude code/Image generator /Images générés/${folder}/${f}" assets/showme5wh/`;
+  }).join('\n');
+  navigator.clipboard.writeText(cpCmd).then(()=>alert(list.length+" photos — galerie téléchargée + commandes cp copiées. Colle dans ton terminal pour copier les fichiers manquants, puis push."), ()=>alert("Galerie téléchargée — "+list.length+" photos"));
+}
+render();
+</script>
+</body>
+</html>
