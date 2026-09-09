@@ -1,0 +1,41 @@
+name: Portfolio — Run from iPhone
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'Instruction pour OpenCode (ex: change le hero, ajoute un projet)'
+        required: true
+        type: string
+      mode:
+        description: 'Mode'
+        required: false
+        default: 'build'
+        type: choice
+        options: [build, plan]
+
+jobs:
+  opencode:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Setup OpenCode
+        run: npm i -g opencode-ai 2>&1 | tail -n 20
+      - name: Run
+        run: |
+          echo "Prompt: ${{ inputs.prompt }}"
+          echo "Mode: ${{ inputs.mode }}"
+          # Exemple: opencode run --prompt "${{ inputs.prompt }}" --mode ${{ inputs.mode }}
+          # Pour l'instant on valide juste le build
+          ls -la
+          cat index.html | head -n 20
+      - name: Commit if changed
+        run: |
+          git config user.name "opencode-bot"
+          git config user.email "bot@fabienk.dev"
+          git diff --quiet || (git add -A && git commit -m "chore: ${{ inputs.prompt }}" && git push)
