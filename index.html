@@ -12,32 +12,17 @@
 <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','system-ui'],display:['Instrument Serif','Georgia','serif']}}}}</script>
 <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/dist/phosphor.js"></script>
 <style>
-  body{color:#1A1A18;font-family:'Plus Jakarta Sans',system-ui,sans-serif; background:#E8E6E1; overflow-x:hidden}
-  .scene{position:relative; perspective:1200px; perspective-origin:50% 18%; transform-style:preserve-3d}
-  .fog-bg{position:fixed; inset:0; z-index:-2; background-color:#E8E6E1; background-image:url('assets/fog-hero-2400.jpg'); background-size:cover; background-position:50% 38%; filter:saturate(0.88) sepia(0.10) hue-rotate(6deg) contrast(1.06) brightness(1.03); transform:translateZ(-180px) scale(1.18); will-change:transform}
-  .fog-veil{position:fixed; inset:0; z-index:-1; background:linear-gradient(to bottom, rgba(253,251,247,0.42), rgba(253,251,247,0.68)); -webkit-mask-image:radial-gradient(ellipse 72% 62% at 33% 38%, transparent 44%, black 82%); mask-image:radial-gradient(ellipse 72% 62% at 33% 38%, transparent 44%, black 82%)}
-  .fog-bloom{position:fixed; inset:0; z-index:-1; background:radial-gradient(ellipse 520px 380px at 33% 38%, rgba(255,255,255,0.88) 0%, transparent 62%); mix-blend-mode:screen; pointer-events:none}
-  .paper{position:relative; background:#FFFEFB; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.04'/%3E%3C/svg%3E"); box-shadow:0 1px 0 rgba(255,255,255,0.9) inset, 0 16px 48px rgba(26,26,24,0.10), 0 2px 8px rgba(26,26,24,0.06); border:1px solid rgba(26,26,24,0.06); transform:translateZ(0); will-change:transform}
-  .parallax{will-change:transform}
+  body{background:#FDFBF7;color:#1A1A18;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
   .display{font-family:'Instrument Serif',Georgia,serif; text-wrap:balance}
-  .grain::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:0.02;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-  .bezel-outer{background:rgba(26,26,24,0.03);border:1px solid rgba(26,26,24,0.05);padding:7px;border-radius:2rem; backdrop-filter:blur(2px)}
-  .bezel-inner{background:#FFFEFB; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.04'/%3E%3C/svg%3E");border:1px solid rgba(26,26,24,0.06);border-radius:calc(2rem - 7px);box-shadow:0 1px 1px rgba(255,255,255,0.9) inset, 0 12px 32px rgba(26,26,24,0.06)}
+  .grain::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:0.035;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .bezel-outer{background:rgba(26,26,24,0.04);border:1px solid rgba(26,26,24,0.06);padding:7px;border-radius:2rem}
+  .bezel-inner{background:#fff;border:1px solid rgba(26,26,24,0.06);border-radius:calc(2rem - 7px);box-shadow:0 1px 1px rgba(255,255,255,0.9) inset, 0 12px 32px rgba(26,26,24,0.06)}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
   .reveal{opacity:0;transform:translateY(14px);filter:blur(4px);transition:all 700ms cubic-bezier(0.32,0.72,0,1)}
   .reveal.in{opacity:1;transform:none;filter:blur(0)}
-  @keyframes pulse{from{opacity:0.72} to{opacity:0.96}}
-  .pulse{animation:pulse 4s cubic-bezier(0.32,0.72,0,1) infinite alternate}
 </style>
 </head>
 <body class="grain">
-<div class="fog-bg parallax" aria-hidden="true"></div>
-<div class="fog-veil" aria-hidden="true"></div>
-<div class="fog-bloom" aria-hidden="true"></div>
-<!-- Front fog image — 3 calques chaud PULSE, cercle englobant -->
-<div class="fog-front-image pulse" aria-hidden="true" style="position:fixed; inset:0; z-index:8; background-image:url('assets/fog-hero-2400.jpg'); background-size:cover; background-position:50% 38%; filter:saturate(0.88) sepia(0.08) hue-rotate(4deg) contrast(1.04); -webkit-mask-image:radial-gradient(circle 760px at 50% 38%, transparent 0% 48%, rgba(0,0,0,0.14) 56%, rgba(0,0,0,0.34) 64%, rgba(0,0,0,0.62) 72%, rgba(0,0,0,0.86) 80%, black 88%); mask-image:radial-gradient(circle 760px at 50% 38%, transparent 0% 48%, rgba(0,0,0,0.14) 56%, rgba(0,0,0,0.34) 64%, rgba(0,0,0,0.62) 72%, rgba(0,0,0,0.86) 80%, black 88%); pointer-events:none; opacity:0.88"></div>
-<div class="fog-front-image-2 pulse" aria-hidden="true" style="position:fixed; inset:0; z-index:8; background-image:url('assets/fog-hero-2400.jpg'); background-size:cover; background-position:50% 38%; filter:saturate(0.82) sepia(0.06) contrast(1.03) brightness(1.04); -webkit-mask-image:radial-gradient(circle 820px at 50% 38%, transparent 0% 52%, rgba(0,0,0,0.08) 60%, rgba(0,0,0,0.22) 68%, rgba(0,0,0,0.48) 76%, rgba(0,0,0,0.72) 84%, black 92%); mask-image:radial-gradient(circle 820px at 50% 38%, transparent 0% 52%, rgba(0,0,0,0.08) 60%, rgba(0,0,0,0.22) 68%, rgba(0,0,0,0.48) 76%, rgba(0,0,0,0.72) 84%, black 92%); pointer-events:none; opacity:0.42; animation-delay:0.6s"></div>
-<div class="fog-front-image-3 pulse" aria-hidden="true" style="position:fixed; inset:0; z-index:8; background-image:url('assets/fog-hero-2400.jpg'); background-size:cover; background-position:50% 38%; filter:saturate(0.78) sepia(0.04) brightness(1.06); -webkit-mask-image:radial-gradient(circle 880px at 50% 38%, transparent 0% 58%, rgba(0,0,0,0.06) 66%, rgba(0,0,0,0.16) 74%, rgba(0,0,0,0.32) 82%, black 92%); mask-image:radial-gradient(circle 880px at 50% 38%, transparent 0% 58%, rgba(0,0,0,0.06) 66%, rgba(0,0,0,0.16) 74%, rgba(0,0,0,0.32) 82%, black 92%); pointer-events:none; opacity:0.22; animation-delay:1.2s"></div>
 <nav class="fixed top-6 left-1/2 -translate-x-1/2 z-40 flex items-center gap-2 bg-white/80 backdrop-blur-2xl border border-black/5 rounded-full px-2 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.08)]">
   <span class="size-8 rounded-full bg-[#1A1A18] text-white grid place-items-center text-[11px] font-bold">F</span>
   <span class="text-[13px] font-semibold pr-2">Fabien</span>
@@ -45,12 +30,10 @@
   <a href="#contact" class="hidden sm:inline text-[12px] font-medium px-3 py-1 rounded-full hover:bg-black/5">Contact</a>
   <a href="https://github.com/FabienK" target="_blank" class="ml-1 bg-[#1A1A18] text-white rounded-full px-4 py-1.5 text-[12px] font-semibold">GitHub ↗</a>
 </nav>
-<div class="scene" id="scene">
 
-<header class="pt-24 pb-10 px-4 max-w-[1200px] mx-auto parallax">
-  <div class="bezel-outer paper">
-    <div class="bezel-inner paper px-6 sm:px-8 py-8 sm:py-10 relative overflow-hidden">
-      <div class="relative z-10">
+<header class="pt-24 pb-10 px-4 max-w-[1200px] mx-auto">
+  <div class="bezel-outer">
+    <div class="bezel-inner px-6 sm:px-8 py-8 sm:py-10">
       <p class="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.18em] uppercase text-white bg-[#1A1A18] rounded-full px-3 py-1.5"><span class="size-1.5 rounded-full bg-emerald-400"></span> Disponible pour missions</p>
       <h1 class="display text-[32px] sm:text-[44px] lg:text-[52px] font-normal leading-[0.9] tracking-[-0.04em] mt-5">Fabien<br><span class="italic font-normal text-[#6B6B6B]">construit des produits</span></h1>
       <p class="max-w-[60ch] text-[14px] leading-relaxed text-[#3A3A38] mt-4">8 produits · 2 umbrellas · 8 repos GitHub. Design systems, apps guitare, packs print — tout est shippé, documenté, mesurable.</p>
@@ -62,7 +45,6 @@
         <div><div class="display text-[22px] font-bold">8</div><div class="text-[11px] font-bold tracking-widest uppercase text-muted">Produits</div></div>
         <div><div class="display text-[22px] font-bold">8</div><div class="text-[11px] font-bold tracking-widest uppercase text-muted">Repos GH</div></div>
         <div><div class="display text-[22px] font-bold">3</div><div class="text-[11px] font-bold tracking-widest uppercase text-muted">Privés</div></div>
-      </div>
       </div>
     </div>
   </div>
@@ -87,7 +69,6 @@
   </footer>
 </main>
 
-</div>
 <script id="DATA" type="application/json">
 {
   "projects": [
@@ -160,24 +141,6 @@ document.querySelectorAll('.filter-btn').forEach(b=>{
   });
 });
 render('all');
-// Parallaxe — 3 calques pour linéarité sans cassure, même plan
-let ticking=false;
-const fogBg=document.querySelector('.fog-bg');
-const fogLayers=document.querySelectorAll('.fog-front-image, .fog-front-image-2, .fog-front-image-3');
-window.addEventListener('scroll',()=>{
-  if(ticking) return;
-  ticking=true;
-  requestAnimationFrame(()=>{
-    const y=window.scrollY;
-    if(fogBg) fogBg.style.transform=`translateZ(-180px) scale(1.18) translateY(${y*0.06}px)`;
-    fogLayers.forEach((el,i)=>{ el.style.transform=`translateY(${y*(0.02 + i*0.008)}px)`; });
-    const sceneEl=document.getElementById('scene');
-    if(sceneEl) sceneEl.style.transform=`translateY(${y*-0.015}px)`;
-    const veil=document.querySelector('.fog-veil');
-    if(veil) veil.style.opacity=String(Math.max(0.45, 1 - y*0.001));
-    ticking=false;
-  });
-},{passive:true});
 </script>
 </body>
 </html>
