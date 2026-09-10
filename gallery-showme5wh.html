@@ -3,58 +3,137 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Galerie — ShowMe5WH · Image generator</title>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@500;600&display=swap" rel="stylesheet">
+<title>ShowMe5WH — Galerie</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','system-ui'],display:['Instrument Serif','Georgia','serif']}}}}</script>
 <style>
-  body{margin:0;background:#FDFBF7;color:#1A1A18;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+  body{background:#FDFBF7;color:#1A1A18;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
   .display{font-family:'Instrument Serif',Georgia,serif}
-  header{max-width:1200px;margin:0 auto;padding:32px 20px}
-  h1{font-family:'Instrument Serif',Georgia,serif;font-size:32px;line-height:1;letter-spacing:-0.02em;margin:0}
-  .sub{color:#6B7280;font-size:13px;margin-top:8px}
-  .grid{max-width:1200px;margin:0 auto;padding:0 20px 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
-  .card{background:#fff;border:1px solid #E8E6E1;border-radius:16px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.04)}
-  .card img{width:100%;height:220px;object-fit:cover;display:block}
-  .card .meta{padding:12px 16px}
-  .card .meta h3{margin:0;font-size:13px;font-weight:700}
-  .card .meta p{margin:4px 0 0;font-size:12px;color:#6B7280;line-height:1.4}
-  a.back{display:inline-flex;align-items:center;gap:6px;margin:20px 20px 0;color:#1A1A18;text-decoration:none;font-size:13px;font-weight:600;border:1px solid #E8E6E1;border-radius:999px;padding:8px 14px;background:#fff}
 </style>
 </head>
 <body>
-<a href="index.html" class="back">← Retour portfolio</a>
-<header>
-  <h1>ShowMe5WH — Galerie</h1>
-  <p class="sub">6 images sur 54 — Flux schnell 1216×832 → 2048×1400 · lexique 34 + styles 20 · <a href="https://github.com/FabienK/Image-generator" target="_blank" style="color:#1A1A18">Image-generator →</a></p>
+<!-- top nav -->
+<nav class="max-w-[1200px] mx-auto px-4 pt-6 flex items-center justify-between">
+  <a href="index.html" class="inline-flex items-center gap-2 bg-white border border-black/10 rounded-full px-4 py-2 text-[13px] font-semibold hover:bg-black/[0.04] transition">← Portfolio</a>
+  <a href="https://github.com/FabienK/Image-generator" target="_blank" class="text-[12px] font-semibold text-[#6B7280] hover:text-[#1A1A18]">Image-generator ↗</a>
+</nav>
+
+<header class="max-w-[1200px] mx-auto px-4 pt-8 pb-6">
+  <h1 class="display text-[32px] leading-[0.95] tracking-[-0.02em]">ShowMe5WH <span class="italic font-normal text-[#6B7280]">— Galerie</span></h1>
+  <p class="text-[13px] leading-relaxed text-[#6B7280] mt-3 max-w-[68ch]">
+    Images générées avec ComfyUI sur M4 — <b class="text-[#1A1A18] font-semibold">Flux schnell</b> · 1216×832 → 2048×1400 · 300 DPI.
+    Pour ajouter ou retirer une photo : mets le fichier dans <code class="bg-white border border-black/10 rounded px-1.5 py-0.5 text-[11px]">assets/showme5wh/</code> et ajoute son nom dans la liste en bas de cette page.
+  </p>
+  <div class="flex flex-wrap gap-2 mt-4 text-[11px]">
+    <span class="inline-flex items-center gap-1.5 bg-[#1A1A18] text-white rounded-full px-3 py-1.5 font-semibold"><span class="size-2 rounded-full bg-emerald-400"></span> Flux schnell</span>
+    <span class="bg-white border border-black/10 rounded-full px-3 py-1.5 font-semibold">300 DPI</span>
+    <span class="bg-white border border-black/10 rounded-full px-3 py-1.5 font-semibold">ComfyUI</span>
+    <span id="count" class="bg-white border border-black/10 rounded-full px-3 py-1.5 font-semibold text-[#6B7280]"></span>
+  </div>
 </header>
-<div style="text-align:center; margin:12px 0; display:flex; gap:8px; justify-content:center; flex-wrap:wrap">
-  <a href="gallery-output.html" style="font-size:11px; color:#fff; background:#1A1A18; border-radius:999px; padding:8px 14px; text-decoration:none; font-weight:600">+ Ajouter depuis Output (387)</a>
-  <a href="gallery-editor.html" style="font-size:11px; color:#1A1A18; background:#fff; border:1px solid #E8E6E1; border-radius:999px; padding:8px 14px; text-decoration:none; font-weight:600">Éditeur 54</a>
-  <button onclick="localStorage.removeItem('comfy:sel');localStorage.removeItem('showme5wh:selection');location.reload()" style="font-size:11px; color:#6B7280; background:#fff; border:1px solid #E8E6E1; border-radius:999px; padding:8px 14px; cursor:pointer">↺ Revenir aux 6 du départ</button>
+
+<main class="max-w-[1200px] mx-auto px-4 pb-16">
+  <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  <p class="text-[11px] text-[#9CA3AF] text-center mt-10">Clique une image pour l'agrandir · <a href="index.html" class="underline text-[#6B7280]">retour portfolio</a></p>
+</main>
+
+<!-- lightbox -->
+<div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm p-4 sm:p-8" onclick="closeLb()">
+  <button onclick="closeLb()" class="absolute top-4 right-4 size-9 rounded-full bg-white/15 text-white grid place-items-center text-[18px] hover:bg-white/25">×</button>
+  <div class="h-full grid place-items-center" onclick="event.stopPropagation()">
+    <img id="lb-img" src="" alt="" class="max-w-full max-h-[82vh] object-contain rounded-2xl shadow-2xl bg-white">
+    <div id="lb-cap" class="text-white text-center mt-4 text-[13px] leading-relaxed"></div>
+  </div>
 </div>
-<div class="grid" id="grid"></div>
+
 <script>
-const fallback = ["01-plongee.jpg","12-teleobjectif.jpg","18-trois-points.jpg","02-photorealiste.jpg","07-3d-render.jpg","09-cyberpunk.jpg"];
-let sel = JSON.parse(localStorage.getItem('showme5wh:selection')||'null') || JSON.parse(localStorage.getItem('comfy:sel')||'null') || [...fallback];
-const grid=document.getElementById('grid');
-function isComfy(f){ return f.startsWith('4w1h_') || f.startsWith('3drender') || f.startsWith('encyclo') || f.includes('flux'); }
-function saveAndRender(){
-  localStorage.setItem('comfy:sel', JSON.stringify(sel));
-  localStorage.setItem('showme5wh:selection', JSON.stringify(sel));
-  render();
-}
+// ——— ÉDITE JUSTE CETTE LISTE ———
+// Mets tes fichiers dans assets/showme5wh/ et liste-les ici.
+// L'ordre = l'ordre d'affichage.
+const images = [
+  "01-plongee.jpg",
+  "12-teleobjectif.jpg",
+  "18-trois-points.jpg",
+  "02-photorealiste.jpg",
+  "07-3d-render.jpg",
+  "09-cyberpunk.jpg",
+  "4w1h_00004_.png",
+  "4w1h_00005_.png",
+  "4w1h_00024_.png",
+  "4w1h_00027_.png",
+  "4w1h_00031_.png",
+  "4w1h_00032_.png",
+  "4w1h_00033_.png",
+  "4w1h_00038_.png",
+  "4w1h_00039_.png",
+  "4w1h_00040_.png",
+  "4w1h_00041_.png",
+  "4w1h_00042_.png",
+];
+
+// Infos modèle/style si connues — sinon on affiche juste le nom de fichier.
+// Tu peux enrichir au fur et à mesure. Si pas d'entrée, fallback = nom de fichier.
+const info = {
+  "01-plongee.jpg":              { label: "Plongée", bag: "Perspective", model: "Flux schnell" },
+  "12-teleobjectif.jpg":         { label: "Téléobjectif", bag: "Perspective", model: "Flux schnell" },
+  "18-trois-points.jpg":         { label: "Trois points de fuite", bag: "Perspective", model: "Flux schnell" },
+  "02-photorealiste.jpg":        { label: "Photoréaliste", bag: "Style", model: "Flux schnell" },
+  "07-3d-render.jpg":            { label: "3D render", bag: "Style", model: "Flux schnell" },
+  "09-cyberpunk.jpg":            { label: "Cyberpunk", bag: "Style", model: "Flux schnell" },
+  "4w1h_00004_.png":             { label: "4W1H #04", bag: "ShowMe5WH", model: "Flux schnell" },
+  "4w1h_00005_.png":             { label: "4W1H #05", bag: "ShowMe5WH", model: "Flux schnell" },
+  "4w1h_00024_.png":             { label: "4W1H #24", bag: "ShowMe5WH", model: "Flux schnell" },
+  "4w1h_00027_.png":             { label: "4W1H #27", bag: "ShowMe5WH", model: "Flux schnell" },
+  "4w1h_00031_.png":             { label: "4W1H #31", bag: "ShowMe5WH", model: "Flux schnell" },
+  "4w1h_00032_.png":             { label: "4W1H #32", bag: "ShowMe5WH", model: "Flux schnell" },
+  "4w1h_00033_.png":             { label: "4W1H #33", bag: "ShowMe5WH", model: "Flux schnell" },
+  "4w1h_00038_.png":             { label: "4W1H #38", bag: "ShowMe5WH", model: "Flux schnell" },
+  "4w1h_00039_.png":             { label: "4W1H #39", bag: "ShowMe5WH", model: "Flux schnell" },
+  "4w1h_00040_.png":             { label: "4W1H #40", bag: "ShowMe5WH", model: "Flux schnell" },
+  "4w1h_00041_.png":             { label: "4W1H #41", bag: "ShowMe5WH", model: "Flux schnell" },
+  "4w1h_00042_.png":             { label: "4W1H #42", bag: "ShowMe5WH", model: "Flux schnell" },
+};
+
+const grid = document.getElementById('grid');
+const countEl = document.getElementById('count');
+
 function render(){
-  grid.innerHTML = sel.map((f,idx)=>{
-    const src = isComfy(f) ? `assets/comfy-output/${f}` : `assets/showme5wh/${f}`;
-    const label = f.replace('.jpg','').replace('.png','');
-    return `<div class="card" style="position:relative"><button onclick="removeAt(${idx})" style="position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,0.65);color:#fff;border:1px solid rgba(255,255,255,0.3);display:grid;place-items:center;font-size:14px;cursor:pointer;z-index:1" title="Retirer">×</button><img src="${src}" alt="${label}" loading="lazy" onerror="this.src='https://picsum.photos/seed/${encodeURIComponent(f)}/600/400'"><div class="meta"><h3>${label}</h3><p>${f}</p></div></div>`;
+  countEl.textContent = images.length + " photos";
+  grid.innerHTML = images.map(f => {
+    const meta = info[f] || { label: f.replace(/\.[^.]+$/,''), bag: "—", model: "Flux schnell" };
+    return `
+      <figure class="group bg-white border border-black/[0.06] rounded-[20px] overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)] transition cursor-zoom-in" onclick="openLb('${f}')">
+        <div class="aspect-[4/3] overflow-hidden bg-[#F3F4F6]">
+          <img src="assets/showme5wh/${f}" alt="${meta.label}" loading="lazy" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid'">
+          <div class="hidden place-items-center h-full text-[11px] text-[#9CA3AF]">manquant: ${f}</div>
+        </div>
+        <figcaption class="px-4 py-3 flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <div class="text-[13px] font-semibold leading-tight truncate">${meta.label}</div>
+            <div class="text-[11px] text-[#9CA3AF] truncate">${f}</div>
+          </div>
+          <div class="shrink-0 flex flex-col items-end gap-1">
+            <span class="text-[10px] font-bold tracking-widest uppercase bg-[#F3F4F6] text-[#374151] rounded-full px-2.5 py-1">${meta.bag}</span>
+            <span class="text-[10px] text-[#9CA3AF]">${meta.model}</span>
+          </div>
+        </figcaption>
+      </figure>`;
   }).join('');
-  document.querySelector('header p.sub').innerHTML = `${sel.length} images — Flux schnell 1216×832 → 2048×1400 · <a href="gallery-output.html" style="color:#1A1A18">← Choisir dans Output (387)</a> · <a href="gallery-editor.html" style="color:#1A1A18">Éditeur 54</a>`;
-  const foot=document.querySelector('footer');
-  if(foot) foot.innerHTML = `${sel.length} / 54 — <a href="gallery-output.html" style="color:#1A1A18">Output (387)</a> · <a href="gallery-editor.html" style="color:#1A1A18">Éditeur</a> · <a href="index.html" style="color:#1A1A18">← Portfolio</a> — <span style="color:#6B7280">clique × pour retirer</span>`;
 }
-function removeAt(i){ sel.splice(i,1); saveAndRender(); }
+function openLb(f){
+  const meta = info[f] || { label: f, bag:"", model:"Flux schnell" };
+  document.getElementById('lb-img').src = "assets/showme5wh/" + f;
+  document.getElementById('lb-cap').innerHTML = `<b>${meta.label}</b> · ${f} <span class="opacity-60">· ${meta.bag} · ${meta.model}</span>`;
+  document.getElementById('lightbox').classList.remove('hidden');
+  document.body.style.overflow='hidden';
+}
+function closeLb(){
+  document.getElementById('lightbox').classList.add('hidden');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLb(); });
 render();
 </script>
-<footer style="max-width:1200px;margin:0 auto;padding:20px;text-align:center;font-size:11px;color:#9CA3AF">6 / 54 — voir <code>Image generator/Images générés/</code> pour le reste · <a href="index.html" style="color:#1A1A18">← Portfolio</a></footer>
 </body>
 </html>
