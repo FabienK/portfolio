@@ -103,15 +103,26 @@ async function handlePublish(selection){
   const index = await resolveWardrobeIndex();
   const entries = await copyWithDedup(selection, index);
   await rewriteGallery(entries);
-  // git
+  // git — avec rebase auto pour éviter non-fast-forward
   try{
     execSync('git add assets/showme5wh gallery-showme5wh.html', {cwd:ROOT, stdio:'pipe'});
-    // check if something to commit
     let diff=''; try{ diff=execSync('git diff --cached --name-only', {cwd:ROOT}).toString(); }catch{}
     if(diff.trim()){
       execSync(`git commit -m "wardrobe: publie tenue (${entries.length})"`, {cwd:ROOT, stdio:'pipe'});
-      execSync('git push', {cwd:ROOT, stdio:'pipe'});
-      log('git push ok', diff.trim().split('\n').length, 'files');
+      try{
+        execSync('git push', {cwd:ROOT, stdio:'pipe'});
+        log('git push ok', diff.trim().split('\n').length, 'files');
+      }catch(pushErr){
+        log('push rejeté, tentative pull --rebase', pushErr.stderr?.toString());
+        try{
+          execSync('git pull --rebase', {cwd:ROOT, stdio:'pipe'});
+          execSync('git push', {cwd:ROOT, stdio:'pipe'});
+          log('git push ok après rebase');
+        }catch(e2){
+          log('git error après rebase', e2.message, e2.stdout?.toString(), e2.stderr?.toString());
+          throw new Error('git push échoué après rebase: ' + (e2.stderr?.toString()||e2.message) + ' — fais git pull --rebase manuellement');
+        }
+      }
     } else log('rien à committer');
   }catch(e){
     log('git error', e.message, e.stdout?.toString(), e.stderr?.toString());
