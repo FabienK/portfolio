@@ -84,13 +84,12 @@ function render(){
   pickCount.textContent = selection.length + " sélectionnées";
   grid.innerHTML = selection.map(f=>{
     const m = info[f] || {label:f.replace(/\.[^.]+$/,''), bag:"—", model:"Flux schnell"};
-    return `<figure class="group bg-white border border-black/[0.06] rounded-[20px] overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.04)]">
-      <div class="aspect-[4/3] overflow-hidden bg-[#F3F4F6] relative cursor-zoom-in" onclick="openLb('${f}')">
+    return `<figure class="group bg-white border border-black/[0.06] rounded-[20px] overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.04)] cursor-zoom-in" onclick="openLb('${f}')">
+      <div class="aspect-[4/3] overflow-hidden bg-[#F3F4F6]">
         <img src="assets/showme5wh/${f}" alt="${m.label}" loading="lazy" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid'">
-        <div class="hidden place-items-center h-full text-[11px] text-[#9CA3AF] p-4 text-center">Fichier manquant<br>${f}<br><span class='text-[10px]'>Ajoute-le dans assets/showme5wh/</span></div>
-        <button onclick="event.stopPropagation(); removeImg('${f}')" class="absolute top-2 right-2 size-7 rounded-full bg-black/60 text-white grid place-items-center text-[14px] hover:bg-black/80 leading-none" title="Retirer">×</button>
+        <div class="hidden place-items-center h-full text-[11px] text-[#9CA3AF] p-4 text-center">Fichier manquant<br>${f}</div>
       </div>
-      <figcaption class="px-4 py-3 flex items-start justify-between gap-3 cursor-zoom-in" onclick="openLb('${f}')">
+      <figcaption class="px-4 py-3 flex items-start justify-between gap-3">
         <div class="min-w-0"><div class="text-[13px] font-semibold truncate">${m.label}</div><div class="text-[11px] text-[#9CA3AF] truncate">${f}</div></div>
         <div class="shrink-0 flex flex-col items-end gap-1"><span class="text-[10px] font-bold tracking-widest uppercase bg-[#F3F4F6] rounded-full px-2.5 py-1">${m.bag}</span><span class="text-[10px] text-[#9CA3AF]">${m.model}</span></div>
       </figcaption>
