@@ -7,131 +7,113 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>tailwind.config={theme:{extend:{fontFamily:{sans:['Plus Jakarta Sans','system-ui'],display:['Instrument Serif','Georgia','serif']}}}}</script>
-<style>
-  body{background:#FDFBF7;color:#1A1A18;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
-  .display{font-family:'Instrument Serif',Georgia,serif}
-</style>
+<style>body{background:#FDFBF7;color:#1A1A18;font-family:'Plus Jakarta Sans',system-ui,sans-serif}.display{font-family:'Instrument Serif',Georgia,serif}</style>
 </head>
 <body>
-<!-- top nav -->
 <nav class="max-w-[1200px] mx-auto px-4 pt-6 flex items-center justify-between">
-  <a href="index.html" class="inline-flex items-center gap-2 bg-white border border-black/10 rounded-full px-4 py-2 text-[13px] font-semibold hover:bg-black/[0.04] transition">← Portfolio</a>
-  <a href="https://github.com/FabienK/Image-generator" target="_blank" class="text-[12px] font-semibold text-[#6B7280] hover:text-[#1A1A18]">Image-generator ↗</a>
+  <a href="index.html" class="inline-flex items-center gap-2 bg-white border border-black/10 rounded-full px-4 py-2 text-[13px] font-semibold hover:bg-black/[0.04]">← Portfolio</a>
+  <div class="flex gap-2">
+    <button id="togglePick" class="bg-[#1A1A18] text-white rounded-full px-4 py-2 text-[12px] font-semibold">Ajouter / Retirer</button>
+    <a href="https://github.com/FabienK/Image-generator" target="_blank" class="hidden sm:inline-flex items-center bg-white border border-black/10 rounded-full px-4 py-2 text-[12px] font-semibold">Image-generator ↗</a>
+  </div>
 </nav>
 
-<header class="max-w-[1200px] mx-auto px-4 pt-8 pb-6">
+<header class="max-w-[1200px] mx-auto px-4 pt-8 pb-4">
   <h1 class="display text-[32px] leading-[0.95] tracking-[-0.02em]">ShowMe5WH <span class="italic font-normal text-[#6B7280]">— Galerie</span></h1>
-  <p class="text-[13px] leading-relaxed text-[#6B7280] mt-3 max-w-[68ch]">
-    Images générées avec ComfyUI sur M4 — <b class="text-[#1A1A18] font-semibold">Flux schnell</b> · 1216×832 → 2048×1400 · 300 DPI.
-    Pour ajouter ou retirer une photo : mets le fichier dans <code class="bg-white border border-black/10 rounded px-1.5 py-0.5 text-[11px]">assets/showme5wh/</code> et ajoute son nom dans la liste en bas de cette page.
-  </p>
+  <p class="text-[13px] text-[#6B7280] mt-3 max-w-[68ch] leading-relaxed">Flux schnell · 1216×832 → 2048×1400 · 300 DPI · ComfyUI M4. Clique une image pour l'agrandir. Utilise <b class="text-[#1A1A18]">Ajouter / Retirer</b> pour choisir tes 18 photos.</p>
   <div class="flex flex-wrap gap-2 mt-4 text-[11px]">
-    <span class="inline-flex items-center gap-1.5 bg-[#1A1A18] text-white rounded-full px-3 py-1.5 font-semibold"><span class="size-2 rounded-full bg-emerald-400"></span> Flux schnell</span>
+    <span class="bg-[#1A1A18] text-white rounded-full px-3 py-1.5 font-semibold inline-flex items-center gap-1.5"><span class="size-2 rounded-full bg-emerald-400"></span> Flux schnell</span>
     <span class="bg-white border border-black/10 rounded-full px-3 py-1.5 font-semibold">300 DPI</span>
-    <span class="bg-white border border-black/10 rounded-full px-3 py-1.5 font-semibold">ComfyUI</span>
     <span id="count" class="bg-white border border-black/10 rounded-full px-3 py-1.5 font-semibold text-[#6B7280]"></span>
   </div>
 </header>
 
 <main class="max-w-[1200px] mx-auto px-4 pb-16">
   <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-  <p class="text-[11px] text-[#9CA3AF] text-center mt-10">Clique une image pour l'agrandir · <a href="index.html" class="underline text-[#6B7280]">retour portfolio</a></p>
+  <p class="text-[11px] text-[#9CA3AF] text-center mt-8">Clique pour agrandir · <a href="index.html" class="underline">retour portfolio</a></p>
+
+  <!-- panneau choix intégré — pas d'onglet, pas de page séparée -->
+  <div id="picker" class="hidden mt-10 bg-white border border-black/10 rounded-[24px] p-5 shadow-[0_8px_24px_rgba(0,0,0,0.04)]">
+    <div class="flex items-center justify-between gap-4 flex-wrap">
+      <h2 class="font-bold text-[14px]">Choisir tes photos</h2>
+      <span id="pickCount" class="text-[11px] text-[#6B7280]"></span>
+    </div>
+    <p class="text-[11px] text-[#9CA3AF] mt-1">Clique pour ajouter ou retirer. Ça s'enregistre tout seul.</p>
+    <div id="pickGrid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mt-4"></div>
+  </div>
 </main>
 
-<!-- lightbox -->
 <div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-sm p-4 sm:p-8" onclick="closeLb()">
-  <button onclick="closeLb()" class="absolute top-4 right-4 size-9 rounded-full bg-white/15 text-white grid place-items-center text-[18px] hover:bg-white/25">×</button>
+  <button class="absolute top-4 right-4 size-9 rounded-full bg-white/15 text-white grid place-items-center text-[18px]">×</button>
   <div class="h-full grid place-items-center" onclick="event.stopPropagation()">
-    <img id="lb-img" src="" alt="" class="max-w-full max-h-[82vh] object-contain rounded-2xl shadow-2xl bg-white">
-    <div id="lb-cap" class="text-white text-center mt-4 text-[13px] leading-relaxed"></div>
+    <img id="lb-img" src="" class="max-w-full max-h-[82vh] object-contain rounded-2xl shadow-2xl bg-white">
+    <div id="lb-cap" class="text-white text-center mt-4 text-[13px]"></div>
   </div>
 </div>
 
 <script>
-// ——— ÉDITE JUSTE CETTE LISTE ———
-// Mets tes fichiers dans assets/showme5wh/ et liste-les ici.
-// L'ordre = l'ordre d'affichage.
-const images = [
-  "01-plongee.jpg",
-  "12-teleobjectif.jpg",
-  "18-trois-points.jpg",
-  "02-photorealiste.jpg",
-  "07-3d-render.jpg",
-  "09-cyberpunk.jpg",
-  "4w1h_00004_.png",
-  "4w1h_00005_.png",
-  "4w1h_00024_.png",
-  "4w1h_00027_.png",
-  "4w1h_00031_.png",
-  "4w1h_00032_.png",
-  "4w1h_00033_.png",
-  "4w1h_00038_.png",
-  "4w1h_00039_.png",
-  "4w1h_00040_.png",
-  "4w1h_00041_.png",
-  "4w1h_00042_.png",
+const defaultImages = [
+  "01-plongee.jpg","12-teleobjectif.jpg","18-trois-points.jpg","02-photorealiste.jpg","07-3d-render.jpg","09-cyberpunk.jpg",
+  "4w1h_00004_.png","4w1h_00005_.png","4w1h_00024_.png","4w1h_00027_.png","4w1h_00031_.png","4w1h_00032_.png","4w1h_00033_.png","4w1h_00038_.png","4w1h_00039_.png","4w1h_00040_.png","4w1h_00041_.png","4w1h_00042_.png",
 ];
+// pool complet pour ajouter — 54 lexique + 12 4w1h (les 18 de base sont dedans)
+const perspectives = ["01-plongee.jpg","01-plongee-naive.jpg","02-contre-plongee.jpg","03-eye-level.jpg","04-birds-eye.jpg","05-worms-eye.jpg","06-champ-contrechamp.jpg","07-trois-quarts.jpg","08-profil.jpg","09-grand-angle.jpg","10-ultra-grand-angle.jpg","11-fisheye.jpg","12-teleobjectif.jpg","12-teleobjectif-naive.jpg","13-standard-50mm.jpg","14-point-de-fuite.jpg","15-ligne-de-fuite.jpg","16-un-point.jpg","17-deux-points.jpg","18-trois-points.jpg","19-atmospherique.jpg","20-ligne-horizon.jpg","21-symetrie-centrale.jpg","22-regle-des-tiers.jpg","22-tiers-naive.jpg","23-cadrage-serre.jpg","24-cadrage-large.jpg","25-faible-pdc.jpg","26-grande-pdc.jpg","27-bokeh.jpg","28-travelling.jpg","29-zoom.jpg","30-pan.jpg","31-tilt.jpg","32-contre-jour.jpg","33-clair-obscur.jpg","34-lumiere-rasante.jpg"];
+const styles = ["01-bande-dessinee.jpg","02-photorealiste.jpg","03-anime.jpg","04-peinture-huile.jpg","05-aquarelle.jpg","06-pixel-art.jpg","07-3d-render.jpg","08-croquis-crayon.jpg","09-cyberpunk.jpg","10-fantasy-medieval.jpg","11-nb-argentique.jpg","12-pop-art.jpg","13-minimaliste-vectoriel.jpg","14-surrealiste.jpg","15-steampunk.jpg","16-gothique.jpg","17-art-nouveau.jpg","18-cartoon.jpg","19-isometrique.jpg","20-impressionniste.jpg"];
+const extra4w1h = ["4w1h_00004_.png","4w1h_00005_.png","4w1h_00024_.png","4w1h_00027_.png","4w1h_00031_.png","4w1h_00032_.png","4w1h_00033_.png","4w1h_00038_.png","4w1h_00039_.png","4w1h_00040_.png","4w1h_00041_.png","4w1h_00042_.png"];
+const pool = [...new Set([...perspectives, ...styles, ...extra4w1h])];
 
-// Infos modèle/style si connues — sinon on affiche juste le nom de fichier.
-// Tu peux enrichir au fur et à mesure. Si pas d'entrée, fallback = nom de fichier.
 const info = {
-  "01-plongee.jpg":              { label: "Plongée", bag: "Perspective", model: "Flux schnell" },
-  "12-teleobjectif.jpg":         { label: "Téléobjectif", bag: "Perspective", model: "Flux schnell" },
-  "18-trois-points.jpg":         { label: "Trois points de fuite", bag: "Perspective", model: "Flux schnell" },
-  "02-photorealiste.jpg":        { label: "Photoréaliste", bag: "Style", model: "Flux schnell" },
-  "07-3d-render.jpg":            { label: "3D render", bag: "Style", model: "Flux schnell" },
-  "09-cyberpunk.jpg":            { label: "Cyberpunk", bag: "Style", model: "Flux schnell" },
-  "4w1h_00004_.png":             { label: "4W1H #04", bag: "ShowMe5WH", model: "Flux schnell" },
-  "4w1h_00005_.png":             { label: "4W1H #05", bag: "ShowMe5WH", model: "Flux schnell" },
-  "4w1h_00024_.png":             { label: "4W1H #24", bag: "ShowMe5WH", model: "Flux schnell" },
-  "4w1h_00027_.png":             { label: "4W1H #27", bag: "ShowMe5WH", model: "Flux schnell" },
-  "4w1h_00031_.png":             { label: "4W1H #31", bag: "ShowMe5WH", model: "Flux schnell" },
-  "4w1h_00032_.png":             { label: "4W1H #32", bag: "ShowMe5WH", model: "Flux schnell" },
-  "4w1h_00033_.png":             { label: "4W1H #33", bag: "ShowMe5WH", model: "Flux schnell" },
-  "4w1h_00038_.png":             { label: "4W1H #38", bag: "ShowMe5WH", model: "Flux schnell" },
-  "4w1h_00039_.png":             { label: "4W1H #39", bag: "ShowMe5WH", model: "Flux schnell" },
-  "4w1h_00040_.png":             { label: "4W1H #40", bag: "ShowMe5WH", model: "Flux schnell" },
-  "4w1h_00041_.png":             { label: "4W1H #41", bag: "ShowMe5WH", model: "Flux schnell" },
-  "4w1h_00042_.png":             { label: "4W1H #42", bag: "ShowMe5WH", model: "Flux schnell" },
+  "01-plongee.jpg":{label:"Plongée",bag:"Perspective",model:"Flux schnell"},"12-teleobjectif.jpg":{label:"Téléobjectif",bag:"Perspective",model:"Flux schnell"},"18-trois-points.jpg":{label:"Trois points de fuite",bag:"Perspective",model:"Flux schnell"},"02-photorealiste.jpg":{label:"Photoréaliste",bag:"Style",model:"Flux schnell"},"07-3d-render.jpg":{label:"3D render",bag:"Style",model:"Flux schnell"},"09-cyberpunk.jpg":{label:"Cyberpunk",bag:"Style",model:"Flux schnell"},
+  "4w1h_00004_.png":{label:"4W1H #04",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00005_.png":{label:"4W1H #05",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00024_.png":{label:"4W1H #24",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00027_.png":{label:"4W1H #27",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00031_.png":{label:"4W1H #31",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00032_.png":{label:"4W1H #32",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00033_.png":{label:"4W1H #33",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00038_.png":{label:"4W1H #38",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00039_.png":{label:"4W1H #39",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00040_.png":{label:"4W1H #40",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00041_.png":{label:"4W1H #41",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00042_.png":{label:"4W1H #42",bag:"ShowMe5WH",model:"Flux schnell"},
 };
+
+let selection = JSON.parse(localStorage.getItem('showme5wh:selection')||'null');
+if(!Array.isArray(selection) || selection.length===0) selection = [...defaultImages];
 
 const grid = document.getElementById('grid');
 const countEl = document.getElementById('count');
+const pickGrid = document.getElementById('pickGrid');
+const pickCount = document.getElementById('pickCount');
+const picker = document.getElementById('picker');
+
+function save(){ localStorage.setItem('showme5wh:selection', JSON.stringify(selection)); localStorage.setItem('comfy:sel', JSON.stringify(selection)); }
 
 function render(){
-  countEl.textContent = images.length + " photos";
-  grid.innerHTML = images.map(f => {
-    const meta = info[f] || { label: f.replace(/\.[^.]+$/,''), bag: "—", model: "Flux schnell" };
-    return `
-      <figure class="group bg-white border border-black/[0.06] rounded-[20px] overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_32px_rgba(0,0,0,0.08)] transition cursor-zoom-in" onclick="openLb('${f}')">
-        <div class="aspect-[4/3] overflow-hidden bg-[#F3F4F6]">
-          <img src="assets/showme5wh/${f}" alt="${meta.label}" loading="lazy" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid'">
-          <div class="hidden place-items-center h-full text-[11px] text-[#9CA3AF]">manquant: ${f}</div>
-        </div>
-        <figcaption class="px-4 py-3 flex items-start justify-between gap-3">
-          <div class="min-w-0">
-            <div class="text-[13px] font-semibold leading-tight truncate">${meta.label}</div>
-            <div class="text-[11px] text-[#9CA3AF] truncate">${f}</div>
-          </div>
-          <div class="shrink-0 flex flex-col items-end gap-1">
-            <span class="text-[10px] font-bold tracking-widest uppercase bg-[#F3F4F6] text-[#374151] rounded-full px-2.5 py-1">${meta.bag}</span>
-            <span class="text-[10px] text-[#9CA3AF]">${meta.model}</span>
-          </div>
-        </figcaption>
-      </figure>`;
+  countEl.textContent = selection.length + " photos";
+  pickCount.textContent = selection.length + " sélectionnées";
+  grid.innerHTML = selection.map(f=>{
+    const m = info[f] || {label:f.replace(/\.[^.]+$/,''), bag:"—", model:"Flux schnell"};
+    return `<figure class="group bg-white border border-black/[0.06] rounded-[20px] overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.04)]">
+      <div class="aspect-[4/3] overflow-hidden bg-[#F3F4F6] relative cursor-zoom-in" onclick="openLb('${f}')">
+        <img src="assets/showme5wh/${f}" alt="${m.label}" loading="lazy" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid'">
+        <div class="hidden place-items-center h-full text-[11px] text-[#9CA3AF] p-4 text-center">Fichier manquant<br>${f}<br><span class='text-[10px]'>Ajoute-le dans assets/showme5wh/</span></div>
+        <button onclick="event.stopPropagation(); removeImg('${f}')" class="absolute top-2 right-2 size-7 rounded-full bg-black/60 text-white grid place-items-center text-[14px] hover:bg-black/80 leading-none" title="Retirer">×</button>
+      </div>
+      <figcaption class="px-4 py-3 flex items-start justify-between gap-3 cursor-zoom-in" onclick="openLb('${f}')">
+        <div class="min-w-0"><div class="text-[13px] font-semibold truncate">${m.label}</div><div class="text-[11px] text-[#9CA3AF] truncate">${f}</div></div>
+        <div class="shrink-0 flex flex-col items-end gap-1"><span class="text-[10px] font-bold tracking-widest uppercase bg-[#F3F4F6] rounded-full px-2.5 py-1">${m.bag}</span><span class="text-[10px] text-[#9CA3AF]">${m.model}</span></div>
+      </figcaption>
+    </figure>`;
+  }).join('') || `<div class="col-span-full text-center py-16 bg-white border border-dashed border-black/10 rounded-[20px] text-[13px] text-[#6B7280]">Aucune photo — clique sur <b>Ajouter / Retirer</b> pour en choisir.</div>`;
+
+  // picker
+  pickGrid.innerHTML = pool.map(f=>{
+    const sel = selection.includes(f);
+    const m = info[f] || {label:f.replace('.jpg','').replace('.png',''), bag:"", model:""};
+    const isKnown = defaultImages.includes(f) || extra4w1h.includes(f);
+    const src = isKnown ? `assets/showme5wh/${f}` : `https://picsum.photos/seed/${encodeURIComponent(f)}/300/200`;
+    return `<div onclick="toggle('${f}')" class="relative rounded-xl overflow-hidden border-2 cursor-pointer ${sel?'border-[#1A1A18] shadow-[0_0_0_2px_#1A1A18]':'border-transparent bg-[#F9F9F7]'}">
+      <img src="${src}" loading="lazy" class="w-full h-24 object-cover" onerror="this.src='https://picsum.photos/seed/fallback/300/200'">
+      <div class="absolute top-1.5 right-1.5 size-5 rounded-full grid place-items-center text-[11px] border ${sel?'bg-[#1A1A18] text-white border-[#1A1A18]':'bg-white/90 border-black/10'}">${sel?'✓':''}</div>
+      <div class="px-2 py-1.5 bg-white"><div class="text-[10px] font-semibold leading-tight truncate">${m.label||f}</div><div class="text-[9px] text-[#9CA3AF] truncate">${f}</div></div>
+    </div>`;
   }).join('');
 }
-function openLb(f){
-  const meta = info[f] || { label: f, bag:"", model:"Flux schnell" };
-  document.getElementById('lb-img').src = "assets/showme5wh/" + f;
-  document.getElementById('lb-cap').innerHTML = `<b>${meta.label}</b> · ${f} <span class="opacity-60">· ${meta.bag} · ${meta.model}</span>`;
-  document.getElementById('lightbox').classList.remove('hidden');
-  document.body.style.overflow='hidden';
-}
-function closeLb(){
-  document.getElementById('lightbox').classList.add('hidden');
-  document.body.style.overflow='';
-}
+function toggle(f){ if(selection.includes(f)) selection = selection.filter(x=>x!==f); else selection.push(f); save(); render(); }
+function removeImg(f){ selection = selection.filter(x=>x!==f); save(); render(); }
+function openLb(f){ const m=info[f]||{label:f,bag:"",model:"Flux schnell"}; document.getElementById('lb-img').src="assets/showme5wh/"+f; document.getElementById('lb-cap').innerHTML=`<b>${m.label}</b> · ${f} <span class='opacity-60'>· ${m.bag} · ${m.model}</span>`; document.getElementById('lightbox').classList.remove('hidden'); document.body.style.overflow='hidden'; }
+function closeLb(){ document.getElementById('lightbox').classList.add('hidden'); document.body.style.overflow=''; }
+document.getElementById('togglePick').onclick=()=> picker.classList.toggle('hidden');
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLb(); });
 render();
 </script>
