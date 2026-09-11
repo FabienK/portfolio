@@ -71,18 +71,17 @@ async function copyWithDedup(selection, index){
     await fs.copyFile(found, destPath);
     out.push({original:f, destName, destPath, srcPath:found, cat, label});
   }
-  // optionally remove orphans in DST not in out (to keep 24 clean)
+  // clean orphans: showme5wh doit refléter exactement la sélection (24 max)
   try{
     const existing = await fs.readdir(DST);
     for(const file of existing){
       if(file.startsWith('.')) continue;
       if(!out.some(o=>o.destName===file)){
-        // keep fog? showme5wh only contains images, safe to unlink orphans
-        // uncomment to auto-clean:
-        // await fs.unlink(path.join(DST,file));
+        await fs.unlink(path.join(DST,file));
+        log('orphan removed', file);
       }
     }
-  }catch{}
+  }catch(e){ log('clean orphans error', e.message); }
   return out;
 }
 
