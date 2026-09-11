@@ -13,15 +13,15 @@
 <nav class="max-w-[1200px] mx-auto px-4 pt-6 flex items-center justify-between">
   <a href="index.html" class="inline-flex items-center gap-2 bg-white border border-black/10 rounded-full px-4 py-2 text-[13px] font-semibold hover:bg-black/[0.04]">← Portfolio</a>
   <div class="flex gap-2">
-    <button id="togglePick" class="bg-[#1A1A18] text-white rounded-full px-4 py-2 text-[12px] font-semibold">Ajouter / Retirer</button>
+    <button id="togglePick" class="bg-[#1A1A18] text-white rounded-full px-4 py-2 text-[12px] font-semibold">Placard (69) ▾</button>
     <a href="https://github.com/FabienK/Image-generator" target="_blank" class="hidden sm:inline-flex items-center bg-white border border-black/10 rounded-full px-4 py-2 text-[12px] font-semibold">Image-generator ↗</a>
   </div>
 </nav>
 
 <header class="max-w-[1200px] mx-auto px-4 pt-8 pb-4">
   <h1 class="display text-[32px] leading-[0.95] tracking-[-0.02em]">ShowMe5WH <span class="italic font-normal text-[#6B7280]">— Galerie</span></h1>
-  <p class="text-[13px] text-[#6B7280] mt-3 max-w-[68ch] leading-relaxed">Flux schnell · 1216×832 → 2048×1400 · 300 DPI · ComfyUI M4. Clique une image pour l'agrandir.</p>
-  <p class="text-[11px] text-[#9CA3AF] mt-2">Le fichier définit le catalogue publié. Le navigateur garde ta vue locale. Si tu modifies le fichier, clique "Revenir au fichier".</p>
+  <p class="text-[13px] text-[#6B7280] mt-3 max-w-[68ch] leading-relaxed">Flux schnell · 1216×832 → 2048×1400 · 300 DPI. Ta tenue du jour en haut, ton placard complet en dessous.</p>
+  <p class="text-[11px] text-[#9CA3AF] mt-2">Le fichier définit la tenue publiée (18). Le navigateur garde ta vue locale. Pour voir le fichier : "Revenir au fichier".</p>
   <div id="syncBanner" class="hidden mt-3 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2 flex items-center justify-between gap-3 text-[11px]">
     <span id="syncText" class="text-amber-800"></span>
     <button onclick="syncToFile()" class="shrink-0 bg-[#1A1A18] text-white rounded-full px-3 py-1.5 font-semibold">Revenir au fichier</button>
@@ -36,19 +36,26 @@
 
 <main class="max-w-[1200px] mx-auto px-4 pb-16">
   <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
-  <p class="text-[11px] text-[#9CA3AF] text-center mt-8">Clique pour agrandir · <a href="index.html" class="underline">retour portfolio</a></p>
+  <p class="text-[11px] text-[#9CA3AF] text-center mt-6">Clique une tenue pour l'agrandir — propre, sans croix</p>
 
-  <!-- panneau choix intégré — pas d'onglet, pas de page séparée -->
-  <div id="picker" class="hidden mt-10 bg-white border border-black/10 rounded-[24px] p-5 shadow-[0_8px_24px_rgba(0,0,0,0.04)]">
+  <div id="wardrobe" class="mt-10 bg-white border border-black/10 rounded-[24px] p-5 shadow-[0_8px_24px_rgba(0,0,0,0.04)]">
     <div class="flex items-center justify-between gap-4 flex-wrap">
-      <h2 class="font-bold text-[14px]">Choisir tes photos</h2>
-      <div class="flex items-center gap-2">
-        <span id="pickCount" class="text-[11px] text-[#6B7280]"></span>
-        <button onclick="reset18()" class="text-[11px] font-semibold bg-[#F3F4F6] hover:bg-[#E8E6E1] rounded-full px-3 py-1">Remettre les 18</button>
-      </div>
+      <h2 class="font-bold text-[15px]">Placard <span class="text-[#6B7280] font-normal text-[12px]">69 pièces — tout ton catalogue local</span></h2>
+      <span id="wardrobeCount" class="text-[11px] text-[#6B7280]"></span>
     </div>
-    <p class="text-[11px] text-[#9CA3AF] mt-1">Clique pour ajouter ou retirer. Ça s'enregistre tout seul.</p>
-    <div id="pickGrid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mt-4"></div>
+    <div class="flex flex-wrap gap-2 mt-3 text-[11px]">
+      <button data-filter="all" class="filter-btn bg-[#1A1A18] text-white rounded-full px-3 py-1.5 font-semibold">Tout (69)</button>
+      <button data-filter="perspective" class="filter-btn bg-white border border-black/10 rounded-full px-3 py-1.5 font-semibold">Perspectives (37)</button>
+      <button data-filter="style" class="filter-btn bg-white border border-black/10 rounded-full px-3 py-1.5 font-semibold">Styles (20)</button>
+      <button data-filter="4w1h" class="filter-btn bg-white border border-black/10 rounded-full px-3 py-1.5 font-semibold">4W1H (12)</button>
+    </div>
+    <p class="text-[11px] text-[#9CA3AF] mt-2">Clique pour enfiler / retirer. Les images lexique viennent de <code>assets/wardrobe</code> (local) — pour GitHub, publie ensuite.</p>
+    <div id="wardrobeGrid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mt-4"></div>
+    <div class="mt-4 flex flex-wrap gap-2 text-[11px] items-center">
+      <button onclick="publishSelection()" class="bg-[#1A1A18] text-white rounded-full px-4 py-2 font-semibold">Publier la tenue → copier</button>
+      <span class="text-[#9CA3AF]">puis <code>git add assets/showme5wh && git push</code></span>
+    </div>
+    <pre id="publishCmd" class="hidden mt-3 bg-[#1A1A18] text-[#E8E6E1] rounded-xl p-3 text-[10px] overflow-auto"></pre>
   </div>
 </main>
 
@@ -61,99 +68,182 @@
 </div>
 
 <script>
-// CATALOGUE PUBLIÉ — modifie cette liste puis git add/commit/push pour publier
-// Le navigateur garde ta vue locale séparément (localStorage). Pour voir le fichier, clique "Revenir au fichier".
+// CATALOGUE PUBLIÉ — modifie cette liste puis git push pour publier
 const defaultImages = [
-  "01-plongee.jpg","12-teleobjectif.jpg","18-trois-points.jpg","02-photorealiste.jpg","07-3d-render.jpg","09-cyberpunk.jpg",
+  "perspectives_print/01-plongee.jpg","perspectives_print/12-teleobjectif.jpg","perspectives_print/18-trois-points.jpg","styles-starter/02-photorealiste.jpg","styles-starter/07-3d-render.jpg","styles-starter/09-cyberpunk.jpg",
   "4w1h_00004_.png","4w1h_00005_.png","4w1h_00024_.png","4w1h_00027_.png","4w1h_00031_.png","4w1h_00032_.png","4w1h_00033_.png","4w1h_00038_.png","4w1h_00039_.png","4w1h_00040_.png","4w1h_00041_.png","4w1h_00042_.png",
 ];
-// pool = catalogue complet disponible dans le panneau (ici = catalogue publié, simple)
-const pool = [...defaultImages];
 
-const info = {
-  "01-plongee.jpg":{label:"Plongée",bag:"Perspective",model:"Flux schnell"},"12-teleobjectif.jpg":{label:"Téléobjectif",bag:"Perspective",model:"Flux schnell"},"18-trois-points.jpg":{label:"Trois points de fuite",bag:"Perspective",model:"Flux schnell"},"02-photorealiste.jpg":{label:"Photoréaliste",bag:"Style",model:"Flux schnell"},"07-3d-render.jpg":{label:"3D render",bag:"Style",model:"Flux schnell"},"09-cyberpunk.jpg":{label:"Cyberpunk",bag:"Style",model:"Flux schnell"},
-  "4w1h_00004_.png":{label:"4W1H #04",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00005_.png":{label:"4W1H #05",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00024_.png":{label:"4W1H #24",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00027_.png":{label:"4W1H #27",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00031_.png":{label:"4W1H #31",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00032_.png":{label:"4W1H #32",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00033_.png":{label:"4W1H #33",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00038_.png":{label:"4W1H #38",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00039_.png":{label:"4W1H #39",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00040_.png":{label:"4W1H #40",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00041_.png":{label:"4W1H #41",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00042_.png":{label:"4W1H #42",bag:"ShowMe5WH",model:"Flux schnell"},
-};
+// Placard complet — 57 lexique + 12 4W1H = 69
+const wardrobe = [
+  {"file":"perspectives_print/01-plongee-naive.jpg","src":"assets/wardrobe/perspectives_print/01-plongee-naive.jpg","cat":"perspective","label":"01 Plongee Naive"},
+  {"file":"perspectives_print/01-plongee.jpg","src":"assets/wardrobe/perspectives_print/01-plongee.jpg","cat":"perspective","label":"01 Plongee"},
+  {"file":"perspectives_print/02-contre-plongee.jpg","src":"assets/wardrobe/perspectives_print/02-contre-plongee.jpg","cat":"perspective","label":"02 Contre Plongee"},
+  {"file":"perspectives_print/03-eye-level.jpg","src":"assets/wardrobe/perspectives_print/03-eye-level.jpg","cat":"perspective","label":"03 Eye Level"},
+  {"file":"perspectives_print/04-birds-eye.jpg","src":"assets/wardrobe/perspectives_print/04-birds-eye.jpg","cat":"perspective","label":"04 Birds Eye"},
+  {"file":"perspectives_print/05-worms-eye.jpg","src":"assets/wardrobe/perspectives_print/05-worms-eye.jpg","cat":"perspective","label":"05 Worms Eye"},
+  {"file":"perspectives_print/06-champ-contrechamp.jpg","src":"assets/wardrobe/perspectives_print/06-champ-contrechamp.jpg","cat":"perspective","label":"06 Champ Contrechamp"},
+  {"file":"perspectives_print/07-trois-quarts.jpg","src":"assets/wardrobe/perspectives_print/07-trois-quarts.jpg","cat":"perspective","label":"07 Trois Quarts"},
+  {"file":"perspectives_print/08-profil.jpg","src":"assets/wardrobe/perspectives_print/08-profil.jpg","cat":"perspective","label":"08 Profil"},
+  {"file":"perspectives_print/09-grand-angle.jpg","src":"assets/wardrobe/perspectives_print/09-grand-angle.jpg","cat":"perspective","label":"09 Grand Angle"},
+  {"file":"perspectives_print/10-ultra-grand-angle.jpg","src":"assets/wardrobe/perspectives_print/10-ultra-grand-angle.jpg","cat":"perspective","label":"10 Ultra Grand Angle"},
+  {"file":"perspectives_print/11-fisheye.jpg","src":"assets/wardrobe/perspectives_print/11-fisheye.jpg","cat":"perspective","label":"11 Fisheye"},
+  {"file":"perspectives_print/12-teleobjectif-naive.jpg","src":"assets/wardrobe/perspectives_print/12-teleobjectif-naive.jpg","cat":"perspective","label":"12 Teleobjectif Naive"},
+  {"file":"perspectives_print/12-teleobjectif.jpg","src":"assets/wardrobe/perspectives_print/12-teleobjectif.jpg","cat":"perspective","label":"12 Teleobjectif"},
+  {"file":"perspectives_print/13-standard-50mm.jpg","src":"assets/wardrobe/perspectives_print/13-standard-50mm.jpg","cat":"perspective","label":"13 Standard 50Mm"},
+  {"file":"perspectives_print/14-point-de-fuite.jpg","src":"assets/wardrobe/perspectives_print/14-point-de-fuite.jpg","cat":"perspective","label":"14 Point De Fuite"},
+  {"file":"perspectives_print/15-ligne-de-fuite.jpg","src":"assets/wardrobe/perspectives_print/15-ligne-de-fuite.jpg","cat":"perspective","label":"15 Ligne De Fuite"},
+  {"file":"perspectives_print/16-un-point.jpg","src":"assets/wardrobe/perspectives_print/16-un-point.jpg","cat":"perspective","label":"16 Un Point"},
+  {"file":"perspectives_print/17-deux-points.jpg","src":"assets/wardrobe/perspectives_print/17-deux-points.jpg","cat":"perspective","label":"17 Deux Points"},
+  {"file":"perspectives_print/18-trois-points.jpg","src":"assets/wardrobe/perspectives_print/18-trois-points.jpg","cat":"perspective","label":"18 Trois Points"},
+  {"file":"perspectives_print/19-atmospherique.jpg","src":"assets/wardrobe/perspectives_print/19-atmospherique.jpg","cat":"perspective","label":"19 Atmospherique"},
+  {"file":"perspectives_print/20-ligne-horizon.jpg","src":"assets/wardrobe/perspectives_print/20-ligne-horizon.jpg","cat":"perspective","label":"20 Ligne Horizon"},
+  {"file":"perspectives_print/21-symetrie-centrale.jpg","src":"assets/wardrobe/perspectives_print/21-symetrie-centrale.jpg","cat":"perspective","label":"21 Symetrie Centrale"},
+  {"file":"perspectives_print/22-regle-des-tiers.jpg","src":"assets/wardrobe/perspectives_print/22-regle-des-tiers.jpg","cat":"perspective","label":"22 Regle Des Tiers"},
+  {"file":"perspectives_print/22-tiers-naive.jpg","src":"assets/wardrobe/perspectives_print/22-tiers-naive.jpg","cat":"perspective","label":"22 Tiers Naive"},
+  {"file":"perspectives_print/23-cadrage-serre.jpg","src":"assets/wardrobe/perspectives_print/23-cadrage-serre.jpg","cat":"perspective","label":"23 Cadrage Serre"},
+  {"file":"perspectives_print/24-cadrage-large.jpg","src":"assets/wardrobe/perspectives_print/24-cadrage-large.jpg","cat":"perspective","label":"24 Cadrage Large"},
+  {"file":"perspectives_print/25-faible-pdc.jpg","src":"assets/wardrobe/perspectives_print/25-faible-pdc.jpg","cat":"perspective","label":"25 Faible Pdc"},
+  {"file":"perspectives_print/26-grande-pdc.jpg","src":"assets/wardrobe/perspectives_print/26-grande-pdc.jpg","cat":"perspective","label":"26 Grande Pdc"},
+  {"file":"perspectives_print/27-bokeh.jpg","src":"assets/wardrobe/perspectives_print/27-bokeh.jpg","cat":"perspective","label":"27 Bokeh"},
+  {"file":"perspectives_print/28-travelling.jpg","src":"assets/wardrobe/perspectives_print/28-travelling.jpg","cat":"perspective","label":"28 Travelling"},
+  {"file":"perspectives_print/29-zoom.jpg","src":"assets/wardrobe/perspectives_print/29-zoom.jpg","cat":"perspective","label":"29 Zoom"},
+  {"file":"perspectives_print/30-pan.jpg","src":"assets/wardrobe/perspectives_print/30-pan.jpg","cat":"perspective","label":"30 Pan"},
+  {"file":"perspectives_print/31-tilt.jpg","src":"assets/wardrobe/perspectives_print/31-tilt.jpg","cat":"perspective","label":"31 Tilt"},
+  {"file":"perspectives_print/32-contre-jour.jpg","src":"assets/wardrobe/perspectives_print/32-contre-jour.jpg","cat":"perspective","label":"32 Contre Jour"},
+  {"file":"perspectives_print/33-clair-obscur.jpg","src":"assets/wardrobe/perspectives_print/33-clair-obscur.jpg","cat":"perspective","label":"33 Clair Obscur"},
+  {"file":"perspectives_print/34-lumiere-rasante.jpg","src":"assets/wardrobe/perspectives_print/34-lumiere-rasante.jpg","cat":"perspective","label":"34 Lumiere Rasante"},
+  {"file":"styles-starter/01-bande-dessinee.jpg","src":"assets/wardrobe/styles-starter/01-bande-dessinee.jpg","cat":"style","label":"01 Bande Dessinee"},
+  {"file":"styles-starter/02-photorealiste.jpg","src":"assets/wardrobe/styles-starter/02-photorealiste.jpg","cat":"style","label":"02 Photorealiste"},
+  {"file":"styles-starter/03-anime.jpg","src":"assets/wardrobe/styles-starter/03-anime.jpg","cat":"style","label":"03 Anime"},
+  {"file":"styles-starter/04-peinture-huile.jpg","src":"assets/wardrobe/styles-starter/04-peinture-huile.jpg","cat":"style","label":"04 Peinture Huile"},
+  {"file":"styles-starter/05-aquarelle.jpg","src":"assets/wardrobe/styles-starter/05-aquarelle.jpg","cat":"style","label":"05 Aquarelle"},
+  {"file":"styles-starter/06-pixel-art.jpg","src":"assets/wardrobe/styles-starter/06-pixel-art.jpg","cat":"style","label":"06 Pixel Art"},
+  {"file":"styles-starter/07-3d-render.jpg","src":"assets/wardrobe/styles-starter/07-3d-render.jpg","cat":"style","label":"07 3D Render"},
+  {"file":"styles-starter/08-croquis-crayon.jpg","src":"assets/wardrobe/styles-starter/08-croquis-crayon.jpg","cat":"style","label":"08 Croquis Crayon"},
+  {"file":"styles-starter/09-cyberpunk.jpg","src":"assets/wardrobe/styles-starter/09-cyberpunk.jpg","cat":"style","label":"09 Cyberpunk"},
+  {"file":"styles-starter/10-fantasy-medieval.jpg","src":"assets/wardrobe/styles-starter/10-fantasy-medieval.jpg","cat":"style","label":"10 Fantasy Medieval"},
+  {"file":"styles-starter/11-nb-argentique.jpg","src":"assets/wardrobe/styles-starter/11-nb-argentique.jpg","cat":"style","label":"11 Nb Argentique"},
+  {"file":"styles-starter/12-pop-art.jpg","src":"assets/wardrobe/styles-starter/12-pop-art.jpg","cat":"style","label":"12 Pop Art"},
+  {"file":"styles-starter/13-minimaliste-vectoriel.jpg","src":"assets/wardrobe/styles-starter/13-minimaliste-vectoriel.jpg","cat":"style","label":"13 Minimaliste Vectoriel"},
+  {"file":"styles-starter/14-surrealiste.jpg","src":"assets/wardrobe/styles-starter/14-surrealiste.jpg","cat":"style","label":"14 Surrealiste"},
+  {"file":"styles-starter/15-steampunk.jpg","src":"assets/wardrobe/styles-starter/15-steampunk.jpg","cat":"style","label":"15 Steampunk"},
+  {"file":"styles-starter/16-gothique.jpg","src":"assets/wardrobe/styles-starter/16-gothique.jpg","cat":"style","label":"16 Gothique"},
+  {"file":"styles-starter/17-art-nouveau.jpg","src":"assets/wardrobe/styles-starter/17-art-nouveau.jpg","cat":"style","label":"17 Art Nouveau"},
+  {"file":"styles-starter/18-cartoon.jpg","src":"assets/wardrobe/styles-starter/18-cartoon.jpg","cat":"style","label":"18 Cartoon"},
+  {"file":"styles-starter/19-isometrique.jpg","src":"assets/wardrobe/styles-starter/19-isometrique.jpg","cat":"style","label":"19 Isometrique"},
+  {"file":"styles-starter/20-impressionniste.jpg","src":"assets/wardrobe/styles-starter/20-impressionniste.jpg","cat":"style","label":"20 Impressionniste"},
+  {"file":"4w1h_00004_.png","src":"assets/showme5wh/4w1h_00004_.png","cat":"4w1h","label":"4W1H 00004"},
+  {"file":"4w1h_00005_.png","src":"assets/showme5wh/4w1h_00005_.png","cat":"4w1h","label":"4W1H 00005"},
+  {"file":"4w1h_00024_.png","src":"assets/showme5wh/4w1h_00024_.png","cat":"4w1h","label":"4W1H 00024"},
+  {"file":"4w1h_00027_.png","src":"assets/showme5wh/4w1h_00027_.png","cat":"4w1h","label":"4W1H 00027"},
+  {"file":"4w1h_00031_.png","src":"assets/showme5wh/4w1h_00031_.png","cat":"4w1h","label":"4W1H 00031"},
+  {"file":"4w1h_00032_.png","src":"assets/showme5wh/4w1h_00032_.png","cat":"4w1h","label":"4W1H 00032"},
+  {"file":"4w1h_00033_.png","src":"assets/showme5wh/4w1h_00033_.png","cat":"4w1h","label":"4W1H 00033"},
+  {"file":"4w1h_00038_.png","src":"assets/showme5wh/4w1h_00038_.png","cat":"4w1h","label":"4W1H 00038"},
+  {"file":"4w1h_00039_.png","src":"assets/showme5wh/4w1h_00039_.png","cat":"4w1h","label":"4W1H 00039"},
+  {"file":"4w1h_00040_.png","src":"assets/showme5wh/4w1h_00040_.png","cat":"4w1h","label":"4W1H 00040"},
+  {"file":"4w1h_00041_.png","src":"assets/showme5wh/4w1h_00041_.png","cat":"4w1h","label":"4W1H 00041"},
+  {"file":"4w1h_00042_.png","src":"assets/showme5wh/4w1h_00042_.png","cat":"4w1h","label":"4W1H 00042"}
+];
+const wardrobeIndex = new Map(wardrobe.map(w=>[w.file,w]));
+function getSrc(file){ const w=wardrobeIndex.get(file); if(!w) return `assets/showme5wh/${file.split('/').pop()}`; return w.src; }
+function getLabel(file){ const w=wardrobeIndex.get(file); return w? w.label : file.replace(/\.[^.]+$/,''); }
+function getCat(file){ const w=wardrobeIndex.get(file); return w? w.cat : "—"; }
+function migrate(old){
+  if(!old) return null;
+  return old.map(f=>{
+    if(wardrobeIndex.has(f)) return f;
+    const base=f.split('/').pop();
+    let cand=`perspectives_print/${base}`; if(wardrobeIndex.has(cand)) return cand;
+    cand=`styles-starter/${base}`; if(wardrobeIndex.has(cand)) return cand;
+    return base; // 4w1h
+  });
+}
 
-let selection = JSON.parse(localStorage.getItem('showme5wh:selection')||'null');
-if(!Array.isArray(selection) || selection.length===0) selection = [...defaultImages];
+let raw = JSON.parse(localStorage.getItem('showme5wh:selection')||'null');
+let selection = migrate(raw);
+if(!Array.isArray(selection) || selection.length===0) selection=[...defaultImages];
 
 const fileKey = JSON.stringify(defaultImages);
 const storedFileKey = localStorage.getItem('showme5wh:fileKey');
 const syncBanner = document.getElementById('syncBanner');
 const syncText = document.getElementById('syncText');
-// si le fichier a changé depuis ta dernière vue locale, propose de sync
 if(storedFileKey && storedFileKey !== fileKey){
   syncBanner.classList.remove('hidden');
-  const oldLen = JSON.parse(storedFileKey).length;
-  syncText.textContent = `Le catalogue du fichier a changé (${oldLen} → ${defaultImages.length}) mais ta vue locale est restée à ${selection.length}.`;
-} else if(JSON.stringify(selection) !== fileKey){
-  // vue locale différente du fichier (après ajout/retrait) -> propose retour fichier
-  if(selection.length !== defaultImages.length){
-    syncBanner.classList.remove('hidden');
-    syncText.textContent = `Ta vue locale a ${selection.length} photos, le fichier en a ${defaultImages.length}.`;
-  }
+  syncText.textContent=`Le catalogue du fichier a changé (${JSON.parse(storedFileKey).length} → ${defaultImages.length}) mais ta vue locale est à ${selection.length}.`;
+} else if(JSON.stringify(selection) !== fileKey && selection.length !== defaultImages.length){
+  syncBanner.classList.remove('hidden');
+  syncText.textContent=`Ta vue locale a ${selection.length} photos, le fichier en a ${defaultImages.length}.`;
 }
-function syncToFile(){
-  selection = [...defaultImages];
-  localStorage.setItem('showme5wh:fileKey', fileKey);
-  save(); render(); syncBanner.classList.add('hidden');
-}
-// mémorise la version du fichier vue
+function syncToFile(){ selection=[...defaultImages]; localStorage.setItem('showme5wh:fileKey', fileKey); save(); render(); syncBanner.classList.add('hidden'); }
 if(!storedFileKey) localStorage.setItem('showme5wh:fileKey', fileKey);
 
-const grid = document.getElementById('grid');
-const countEl = document.getElementById('count');
-const pickGrid = document.getElementById('pickGrid');
-const pickCount = document.getElementById('pickCount');
-const picker = document.getElementById('picker');
-
-function save(){
-  localStorage.setItem('showme5wh:selection', JSON.stringify(selection));
-  localStorage.setItem('comfy:sel', JSON.stringify(selection));
-  localStorage.setItem('showme5wh:fileKey', fileKey);
-}
-
+const grid=document.getElementById('grid');
+const countEl=document.getElementById('count');
+const wardrobeGrid=document.getElementById('wardrobeGrid');
+const wardrobeCount=document.getElementById('wardrobeCount');
+let currentFilter='all';
+function save(){ localStorage.setItem('showme5wh:selection', JSON.stringify(selection)); localStorage.setItem('showme5wh:fileKey', fileKey); }
 function render(){
-  countEl.textContent = `Vue locale: ${selection.length} photos`;
-  document.getElementById('fileCount').textContent = `Fichier: ${defaultImages.length} photos`;
-  pickCount.textContent = selection.length + " sélectionnées";
-  grid.innerHTML = selection.map(f=>{
-    const m = info[f] || {label:f.replace(/\.[^.]+$/,''), bag:"—", model:"Flux schnell"};
+  countEl.textContent=`Vue locale: ${selection.length} photos`;
+  document.getElementById('fileCount').textContent=`Fichier: ${defaultImages.length} photos`;
+  wardrobeCount.textContent=selection.length+" enfilées / "+wardrobe.length+" au placard";
+  grid.innerHTML=selection.map(f=>{
+    const src=getSrc(f);
+    const fallback=`assets/showme5wh/${f.split('/').pop()}`;
+    const label=getLabel(f);
+    const cat=getCat(f);
     return `<figure class="group bg-white border border-black/[0.06] rounded-[20px] overflow-hidden shadow-[0_8px_24px_rgba(0,0,0,0.04)] cursor-zoom-in" onclick="openLb('${f}')">
       <div class="aspect-[4/3] overflow-hidden bg-[#F3F4F6]">
-        <img src="assets/showme5wh/${f}" alt="${m.label}" loading="lazy" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500" onerror="this.style.display='none'; this.nextElementSibling.style.display='grid'">
-        <div class="hidden place-items-center h-full text-[11px] text-[#9CA3AF] p-4 text-center">Fichier manquant<br>${f}</div>
+        <img src="${src}" alt="${label}" loading="lazy" class="w-full h-full object-cover group-hover:scale-[1.02] transition duration-500" onerror="this.onerror=null; this.src='${fallback}'">
       </div>
-      <figcaption class="px-4 py-3 flex items-start justify-between gap-3">
-        <div class="min-w-0"><div class="text-[13px] font-semibold truncate">${m.label}</div><div class="text-[11px] text-[#9CA3AF] truncate">${f}</div></div>
-        <div class="shrink-0 flex flex-col items-end gap-1"><span class="text-[10px] font-bold tracking-widest uppercase bg-[#F3F4F6] rounded-full px-2.5 py-1">${m.bag}</span><span class="text-[10px] text-[#9CA3AF]">${m.model}</span></div>
-      </figcaption>
+      <figcaption class="px-4 py-3 flex items-start justify-between gap-3"><div class="min-w-0"><div class="text-[13px] font-semibold truncate">${label}</div><div class="text-[11px] text-[#9CA3AF] truncate">${f}</div></div><div class="shrink-0 flex flex-col items-end gap-1"><span class="text-[10px] font-bold tracking-widest uppercase bg-[#F3F4F6] rounded-full px-2.5 py-1">${cat}</span></div></figcaption>
     </figure>`;
-  }).join('') || `<div class="col-span-full text-center py-16 bg-white border border-dashed border-black/10 rounded-[20px] text-[13px] text-[#6B7280]">Aucune photo — clique sur <b>Ajouter / Retirer</b> pour en choisir.</div>`;
-
-  // picker — que les 18 vraies images, pas de placeholder
-  pickGrid.innerHTML = pool.map(f=>{
-    const sel = selection.includes(f);
-    const m = info[f] || {label:f.replace('.jpg','').replace('.png',''), bag:"", model:""};
-    const src = `assets/showme5wh/${f}`;
-    return `<div onclick="toggle('${f}')" class="relative rounded-xl overflow-hidden border-2 cursor-pointer ${sel?'border-[#1A1A18] shadow-[0_0_0_2px_#1A1A18]':'border-transparent bg-[#F9F9F7]'}">
-      <img src="${src}" loading="lazy" class="w-full h-24 object-cover">
+  }).join('') || `<div class="col-span-full text-center py-16 bg-white border border-dashed border-black/10 rounded-[20px] text-[13px] text-[#6B7280]">Aucune tenue — ouvre le placard.</div>`;
+  const filtered=currentFilter==='all'? wardrobe : wardrobe.filter(w=>w.cat===currentFilter);
+  wardrobeGrid.innerHTML=filtered.map(w=>{
+    const sel=selection.includes(w.file);
+    return `<div onclick="toggle('${w.file}')" class="relative rounded-xl overflow-hidden border-2 cursor-pointer ${sel?'border-[#1A1A18] shadow-[0_0_0_2px_#1A1A18]':'border-transparent bg-[#F9F9F7]'}">
+      <img src="${w.src}" loading="lazy" class="w-full h-24 object-cover">
       <div class="absolute top-1.5 right-1.5 size-5 rounded-full grid place-items-center text-[11px] border ${sel?'bg-[#1A1A18] text-white border-[#1A1A18]':'bg-white/90 border-black/10'}">${sel?'✓':''}</div>
-      <div class="px-2 py-1.5 bg-white"><div class="text-[10px] font-semibold leading-tight truncate">${m.label||f}</div><div class="text-[9px] text-[#9CA3AF] truncate">${f}</div></div>
+      <div class="px-2 py-1.5 bg-white"><div class="text-[10px] font-semibold leading-tight truncate">${w.label}</div><div class="text-[9px] text-[#9CA3AF] truncate">${w.cat}</div></div>
     </div>`;
   }).join('');
 }
-function toggle(f){
-  if(selection.includes(f)) selection = selection.filter(x=>x!==f);
-  else { selection.push(f); selection.sort((a,b)=> defaultImages.indexOf(a) - defaultImages.indexOf(b)); }
+function toggle(file){
+  if(selection.includes(file)) selection=selection.filter(x=>x!==file);
+  else { selection.push(file); selection.sort((a,b)=>{
+    const ia=wardrobe.findIndex(w=>w.file===a);
+    const ib=wardrobe.findIndex(w=>w.file===b);
+    if(ia===-1 && ib===-1) return 0;
+    if(ia===-1) return 1;
+    if(ib===-1) return -1;
+    return ia-ib;
+  });}
   save(); render();
 }
-function removeImg(f){ selection = selection.filter(x=>x!==f); save(); render(); }
-function reset18(){ syncToFile(); }
-function openLb(f){ const m=info[f]||{label:f,bag:"",model:"Flux schnell"}; document.getElementById('lb-img').src="assets/showme5wh/"+f; document.getElementById('lb-cap').innerHTML=`<b>${m.label}</b> · ${f} <span class='opacity-60'>· ${m.bag} · ${m.model}</span>`; document.getElementById('lightbox').classList.remove('hidden'); document.body.style.overflow='hidden'; }
+function publishSelection(){
+  const lexique=selection.filter(f=> f.startsWith('perspectives_print/') || f.startsWith('styles-starter/'));
+  if(!lexique.length){ alert("Ta tenue est déjà dans showme5wh."); return; }
+  const cmds=lexique.map(f=> `cp "assets/wardrobe/${f}" "assets/showme5wh/${f.split('/').pop()}"`).join('\n');
+  const pre=document.getElementById('publishCmd');
+  pre.textContent=cmds+`\n\n# puis\ngit add assets/showme5wh\n`+`git commit -m "wardrobe: publie ${lexique.length} lexique"\ngit push`;
+  pre.classList.remove('hidden');
+  navigator.clipboard.writeText(cmds).then(()=> alert("Commandes copiées"), ()=> alert(cmds));
+}
+function openLb(file){ const src=getSrc(file); const label=getLabel(file); document.getElementById('lb-img').src=src; document.getElementById('lb-cap').innerHTML=`<b>${label}</b> · ${file}`; document.getElementById('lightbox').classList.remove('hidden'); document.body.style.overflow='hidden'; }
 function closeLb(){ document.getElementById('lightbox').classList.add('hidden'); document.body.style.overflow=''; }
-document.getElementById('togglePick').onclick=()=> picker.classList.toggle('hidden');
+document.getElementById('togglePick').onclick=()=>{
+  const el=document.getElementById('wardrobe');
+  el.classList.toggle('hidden');
+  document.getElementById('togglePick').textContent=el.classList.contains('hidden') ? 'Placard (69) ▸' : 'Placard (69) ▾';
+};
+document.querySelectorAll('.filter-btn').forEach(b=> b.addEventListener('click', ()=>{
+  document.querySelectorAll('.filter-btn').forEach(x=> x.className='filter-btn bg-white border border-black/10 rounded-full px-3 py-1.5 font-semibold');
+  b.className='filter-btn bg-[#1A1A18] text-white rounded-full px-3 py-1.5 font-semibold';
+  currentFilter=b.dataset.filter; render();
+}));
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeLb(); });
 render();
 </script>
