@@ -67,9 +67,16 @@ const info = {
   "4w1h_00004_.png":{label:"4W1H #04",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00005_.png":{label:"4W1H #05",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00024_.png":{label:"4W1H #24",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00027_.png":{label:"4W1H #27",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00031_.png":{label:"4W1H #31",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00032_.png":{label:"4W1H #32",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00033_.png":{label:"4W1H #33",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00038_.png":{label:"4W1H #38",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00039_.png":{label:"4W1H #39",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00040_.png":{label:"4W1H #40",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00041_.png":{label:"4W1H #41",bag:"ShowMe5WH",model:"Flux schnell"},"4w1h_00042_.png":{label:"4W1H #42",bag:"ShowMe5WH",model:"Flux schnell"},
 };
 
+const GALLERY_VERSION = "2026-09-11-v4-18-clean";
 let selection = JSON.parse(localStorage.getItem('showme5wh:selection')||'null');
-// si ancien choix bancal (2 photos) on remet les 18 automatiquement une fois
-if(!Array.isArray(selection) || selection.length===0 || selection.length===2) selection = [...defaultImages];
+let storedVersion = localStorage.getItem('showme5wh:version');
+// force mise à jour si version a changé ou si ancienne sélection bancale (0,2,14)
+if(storedVersion !== GALLERY_VERSION || !Array.isArray(selection) || selection.length===0 || selection.length===2 || selection.length===14){
+  selection = [...defaultImages];
+  localStorage.setItem('showme5wh:version', GALLERY_VERSION);
+  localStorage.setItem('showme5wh:selection', JSON.stringify(selection));
+  localStorage.setItem('comfy:sel', JSON.stringify(selection));
+}
 
 const grid = document.getElementById('grid');
 const countEl = document.getElementById('count');
