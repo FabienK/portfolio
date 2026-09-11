@@ -36,7 +36,10 @@
   <div id="picker" class="hidden mt-10 bg-white border border-black/10 rounded-[24px] p-5 shadow-[0_8px_24px_rgba(0,0,0,0.04)]">
     <div class="flex items-center justify-between gap-4 flex-wrap">
       <h2 class="font-bold text-[14px]">Choisir tes photos</h2>
-      <span id="pickCount" class="text-[11px] text-[#6B7280]"></span>
+      <div class="flex items-center gap-2">
+        <span id="pickCount" class="text-[11px] text-[#6B7280]"></span>
+        <button onclick="reset18()" class="text-[11px] font-semibold bg-[#F3F4F6] hover:bg-[#E8E6E1] rounded-full px-3 py-1">Remettre les 18</button>
+      </div>
     </div>
     <p class="text-[11px] text-[#9CA3AF] mt-1">Clique pour ajouter ou retirer. Ça s'enregistre tout seul.</p>
     <div id="pickGrid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mt-4"></div>
@@ -56,11 +59,8 @@ const defaultImages = [
   "01-plongee.jpg","12-teleobjectif.jpg","18-trois-points.jpg","02-photorealiste.jpg","07-3d-render.jpg","09-cyberpunk.jpg",
   "4w1h_00004_.png","4w1h_00005_.png","4w1h_00024_.png","4w1h_00027_.png","4w1h_00031_.png","4w1h_00032_.png","4w1h_00033_.png","4w1h_00038_.png","4w1h_00039_.png","4w1h_00040_.png","4w1h_00041_.png","4w1h_00042_.png",
 ];
-// pool complet pour ajouter — 54 lexique + 12 4w1h (les 18 de base sont dedans)
-const perspectives = ["01-plongee.jpg","01-plongee-naive.jpg","02-contre-plongee.jpg","03-eye-level.jpg","04-birds-eye.jpg","05-worms-eye.jpg","06-champ-contrechamp.jpg","07-trois-quarts.jpg","08-profil.jpg","09-grand-angle.jpg","10-ultra-grand-angle.jpg","11-fisheye.jpg","12-teleobjectif.jpg","12-teleobjectif-naive.jpg","13-standard-50mm.jpg","14-point-de-fuite.jpg","15-ligne-de-fuite.jpg","16-un-point.jpg","17-deux-points.jpg","18-trois-points.jpg","19-atmospherique.jpg","20-ligne-horizon.jpg","21-symetrie-centrale.jpg","22-regle-des-tiers.jpg","22-tiers-naive.jpg","23-cadrage-serre.jpg","24-cadrage-large.jpg","25-faible-pdc.jpg","26-grande-pdc.jpg","27-bokeh.jpg","28-travelling.jpg","29-zoom.jpg","30-pan.jpg","31-tilt.jpg","32-contre-jour.jpg","33-clair-obscur.jpg","34-lumiere-rasante.jpg"];
-const styles = ["01-bande-dessinee.jpg","02-photorealiste.jpg","03-anime.jpg","04-peinture-huile.jpg","05-aquarelle.jpg","06-pixel-art.jpg","07-3d-render.jpg","08-croquis-crayon.jpg","09-cyberpunk.jpg","10-fantasy-medieval.jpg","11-nb-argentique.jpg","12-pop-art.jpg","13-minimaliste-vectoriel.jpg","14-surrealiste.jpg","15-steampunk.jpg","16-gothique.jpg","17-art-nouveau.jpg","18-cartoon.jpg","19-isometrique.jpg","20-impressionniste.jpg"];
-const extra4w1h = ["4w1h_00004_.png","4w1h_00005_.png","4w1h_00024_.png","4w1h_00027_.png","4w1h_00031_.png","4w1h_00032_.png","4w1h_00033_.png","4w1h_00038_.png","4w1h_00039_.png","4w1h_00040_.png","4w1h_00041_.png","4w1h_00042_.png"];
-const pool = [...new Set([...perspectives, ...styles, ...extra4w1h])];
+// pool = les 18 qui existent vraiment dans assets/showme5wh — pas de picsum, pas de 54 fantômes
+const pool = [...defaultImages];
 
 const info = {
   "01-plongee.jpg":{label:"Plongée",bag:"Perspective",model:"Flux schnell"},"12-teleobjectif.jpg":{label:"Téléobjectif",bag:"Perspective",model:"Flux schnell"},"18-trois-points.jpg":{label:"Trois points de fuite",bag:"Perspective",model:"Flux schnell"},"02-photorealiste.jpg":{label:"Photoréaliste",bag:"Style",model:"Flux schnell"},"07-3d-render.jpg":{label:"3D render",bag:"Style",model:"Flux schnell"},"09-cyberpunk.jpg":{label:"Cyberpunk",bag:"Style",model:"Flux schnell"},
@@ -96,14 +96,13 @@ function render(){
     </figure>`;
   }).join('') || `<div class="col-span-full text-center py-16 bg-white border border-dashed border-black/10 rounded-[20px] text-[13px] text-[#6B7280]">Aucune photo — clique sur <b>Ajouter / Retirer</b> pour en choisir.</div>`;
 
-  // picker
+  // picker — que les 18 vraies images, pas de placeholder
   pickGrid.innerHTML = pool.map(f=>{
     const sel = selection.includes(f);
     const m = info[f] || {label:f.replace('.jpg','').replace('.png',''), bag:"", model:""};
-    const isKnown = defaultImages.includes(f) || extra4w1h.includes(f);
-    const src = isKnown ? `assets/showme5wh/${f}` : `https://picsum.photos/seed/${encodeURIComponent(f)}/300/200`;
+    const src = `assets/showme5wh/${f}`;
     return `<div onclick="toggle('${f}')" class="relative rounded-xl overflow-hidden border-2 cursor-pointer ${sel?'border-[#1A1A18] shadow-[0_0_0_2px_#1A1A18]':'border-transparent bg-[#F9F9F7]'}">
-      <img src="${src}" loading="lazy" class="w-full h-24 object-cover" onerror="this.src='https://picsum.photos/seed/fallback/300/200'">
+      <img src="${src}" loading="lazy" class="w-full h-24 object-cover">
       <div class="absolute top-1.5 right-1.5 size-5 rounded-full grid place-items-center text-[11px] border ${sel?'bg-[#1A1A18] text-white border-[#1A1A18]':'bg-white/90 border-black/10'}">${sel?'✓':''}</div>
       <div class="px-2 py-1.5 bg-white"><div class="text-[10px] font-semibold leading-tight truncate">${m.label||f}</div><div class="text-[9px] text-[#9CA3AF] truncate">${f}</div></div>
     </div>`;
@@ -111,6 +110,7 @@ function render(){
 }
 function toggle(f){ if(selection.includes(f)) selection = selection.filter(x=>x!==f); else selection.push(f); save(); render(); }
 function removeImg(f){ selection = selection.filter(x=>x!==f); save(); render(); }
+function reset18(){ selection=[...defaultImages]; save(); render(); }
 function openLb(f){ const m=info[f]||{label:f,bag:"",model:"Flux schnell"}; document.getElementById('lb-img').src="assets/showme5wh/"+f; document.getElementById('lb-cap').innerHTML=`<b>${m.label}</b> · ${f} <span class='opacity-60'>· ${m.bag} · ${m.model}</span>`; document.getElementById('lightbox').classList.remove('hidden'); document.body.style.overflow='hidden'; }
 function closeLb(){ document.getElementById('lightbox').classList.add('hidden'); document.body.style.overflow=''; }
 document.getElementById('togglePick').onclick=()=> picker.classList.toggle('hidden');
