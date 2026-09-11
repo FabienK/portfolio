@@ -8,15 +8,14 @@
 ## Workspace
 - Chemin avec espace — toujours quoter : `"/Users/fabien_1/Documents/Projet opencode/Agents/portfolio"`. `Projet opencode` non quoté casse `open`, `node`, et globs (même gotcha que `Pronote`/`Viz-projet`).
 - Parent `Projet opencode/` est un umbrella, pas un monorepo — siblings `../Pronote`, `../Viz-projet`, `../Figma`, `../../draw-it`, `../../Figma` sont indépendants. Ne pas lire/écrire hors `portfolio/` sans demande.
-- Git repo actif (`74c5c58` HEAD) — `assets/fog-hero-2400.jpg` tracké, `fog-hero-flux-*.png` / `fog-hero-warm-2400.jpg` / `comfy-output/` untracked.
+- Git repo actif (`d8987fd` HEAD) — 2 HTML restants (`index.html`, `gallery-showme5wh.html`), `assets/fog-hero-2400.jpg` tracké, `assets/showme5wh/` 18 fichiers trackés (6 JPG lexique + 12 PNG 4w1h).
 - Pas de `opencode.json` local. Global : `~/.config/opencode/opencode.jsonc` (Playwright MCP activé). Pas de CI, pas de lockfile.
+- Placard rangé 2026-09-11 : `pack-V1-Complet-39 2/Images générés` supprimé, `ComfyUI/output` dédupliqué, `backend/generated_batches` nettoyé (~268M gagnés) — voir `../Image generator/agents.md:1`.
 
 ## Commandes
 ```bash
 open "/Users/fabien_1/Documents/Projet opencode/Agents/portfolio/index.html"  # file:// canonique — hero fog + grille 8 + filtres
-open "/Users/fabien_1/Documents/Projet opencode/Agents/portfolio/gallery-output.html"  # 385 ComfyUI
-open "/Users/fabien_1/Documents/Projet opencode/Agents/portfolio/gallery-editor.html"  # 54 fichiers éditable + localStorage
-open "/Users/fabien_1/Documents/Projet opencode/Agents/portfolio/prototype-fog.html"   # proto fog seul
+open "/Users/fabien_1/Documents/Projet opencode/Agents/portfolio/gallery-showme5wh.html"  # galerie ShowMe5WH 18 (propre, sans croix)
 ```
 
 ## Architecture — non-évident
@@ -28,15 +27,16 @@ open "/Users/fabien_1/Documents/Projet opencode/Agents/portfolio/prototype-fog.h
   - calque 3 `880px, transparent 58% → 0.06→0.16→0.32` opacité `0.22`
   Centre = cercle englobant le hero (pas un point). Règle des tiers : foyer lumineux `33% 38%` (aube, pin, backlight rasant).
 - **Grille** (`index.html:130-179`) : `grid-cols-12 gap-5`, `col-span-12 lg:col-span-8` pour le 1er, `col-span-12 sm:col-span-6 lg:col-span-4` ensuite. Cartes bezel `rounded-[32px]/[24px]` `border-left:3px`, `reveal` `translateY 14px blur 4px 700ms cubic-bezier(0.32,0.72,0,1)` + stagger `40ms` + `IntersectionObserver threshold 0.1`. Filtres `data-filter` (`all/prod/WIP/opencode/claude`).
+- **Galerie ShowMe5WH** (`gallery-showme5wh.html:58-63`) : 18 fichiers par défaut (`01-plongee.jpg` etc. + 12 `4w1h_*.png`) — grille `1/2/3` propre sans croix (clic = lightbox), panneau `Ajouter / Retirer` caché par défaut avec `pool 18` + `toggle` + tri `defaultImages` + `Remettre les 18`. `localStorage showme5wh:selection` (migration basename → dossier si besoin), auto-reset si longueur 2.
 - **DATA** (`index.html:103-116`) : JSON inliné, pas de fetch — `file://` offline direct. `runtime` = `opencode` (4) / `claude` (4), `statut` = `prod` (6) / `WIP` (2).
 
 ## Gotchas vérifiés
 - `cdn.tailwindcss.com` + `fonts.googleapis.com` + `unpkg.com/@phosphor-icons` requièrent réseau — en `file://` offline sans réseau, hero non stylé / icons manquantes. Pas de fallback local.
-- `assets/fog-hero-2400.jpg` (249 Ko) est le seul asset fog tracké et référencé (`og:image`, `fog-bg`, 3 calques). `fog-hero-flux-*.png` (1 Mo+) et `fog-hero-warm-2400.jpg` (3 Mo) sont untracked — ne pas les référencer sans `git add`.
+- `assets/fog-hero-2400.jpg` (249 Ko) est le seul asset fog tracké et référencé (`og:image`, `fog-bg`, 3 calques). `fog-hero-flux-*.png` (1 Mo+) et `fog-hero-warm-2400.jpg` (3 Mo) sont untracked et ignorés (`.gitignore`).
 - Espace dans `Projet opencode` : `open` et globs cassent sans quotes — reproduit dans `Pronote`/`Viz-projet`.
-- `gallery-*` utilisent `localStorage` (`showme5wh:selection`) — `file://` par fichier = origin différent, clés non partagées entre `gallery-output.html` et `index.html` si ouverts via chemins différents.
+- `gallery-showme5wh.html` : `localStorage` (`showme5wh:selection` / `comfy:sel`) — `file://` = origin par fichier, clé partagée mais attention au cache (hard refresh `Cmd+Shift+R` après deploy). Plus de `gallery-output.html` / `gallery-editor.html` — supprimés.
 
 ## Assets
 - `assets/fog-hero-2400.jpg` — Flux schnell `1216×832 → 2048×1400` recadré, aube pins + cône volumétrique `33% 38%`
-- `assets/showme5wh/` — 9 PNG `4w1h_*` sélection ShowMe5WH (source `comfy-output/`)
-- `prototype-fog.html` / `gallery-fog.html` — protos fog isolés (non canoniques, conservés)
+- `assets/showme5wh/` — 18 fichiers (6 JPG lexique `perspectives_print/styles-starter` + 12 PNG `4w1h_*`) — trackés, source `../Image generator/Images générés` + `ComfyUI/output` copiés (wardrobe symlink local supprimé, placard rangé)
+- `assets/comfy-output` — symlink local vers `../../Projets Claude code/Image generator /Image-generator/ComfyUI/output` (ignoré, non commité)
