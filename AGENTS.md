@@ -8,7 +8,7 @@
 ## Workspace
 - Chemin avec espace — toujours quoter : `"/Users/fabien_1/Documents/Projet opencode/Agents/portfolio"`. `Projet opencode` non quoté casse `open`, `node`, et globs (même gotcha que `Pronote`/`Viz-projet`).
 - Parent `Projet opencode/` est un umbrella, pas un monorepo — siblings `../Pronote`, `../Viz-projet`, `../Figma`, `../../draw-it`, `../../Figma` sont indépendants. Ne pas lire/écrire hors `portfolio/` sans demande.
-- Git repo actif (`a19426e` HEAD) — 2 HTML vitrine (`index.html`, `gallery-showme5wh.html` 24 max), `placard.html` local 904 (ignoré), `assets/fog-hero-2400.jpg` tracké, `assets/showme5wh/` 24 fichiers trackés (12 JPG lexique + 12 PNG 4w1h).
+- Git repo actif (`a19426e` HEAD) — 2 HTML vitrine (`index.html`, `gallery-showme5wh.html` 24 max composition libre), `placard.html` local 904 (ignoré), `assets/fog-hero-2400.jpg` tracké, `assets/showme5wh/` 24 fichiers trackés (composition libre ≤24, any cat/any mix).
 - Pas de `opencode.json` local. Global : `~/.config/opencode/opencode.jsonc` (Playwright MCP activé). Pas de CI, pas de lockfile.
 - Placard rangé 2026-09-11 : `pack-V1-Complet-39 2/Images générés` supprimé, `ComfyUI/output` dédupliqué, `backend/generated_batches` nettoyé (~268M gagnés) — voir `../Image generator/agents.md:1`. Vitrine limitée à 24, placard complet 904 en local.
 
@@ -28,7 +28,7 @@ open "/Users/fabien_1/Documents/Projet opencode/Agents/portfolio/placard.html"  
   - calque 3 `880px, transparent 58% → 0.06→0.16→0.32` opacité `0.22`
   Centre = cercle englobant le hero (pas un point). Règle des tiers : foyer lumineux `33% 38%` (aube, pin, backlight rasant).
 - **Grille** (`index.html:130-179`) : `grid-cols-12 gap-5`, `col-span-12 lg:col-span-8` pour le 1er, `col-span-12 sm:col-span-6 lg:col-span-4` ensuite. Cartes bezel `rounded-[32px]/[24px]` `border-left:3px`, `reveal` `translateY 14px blur 4px 700ms cubic-bezier(0.32,0.72,0,1)` + stagger `40ms` + `IntersectionObserver threshold 0.1`. Filtres `data-filter` (`all/prod/WIP/opencode/claude`).
-- **Galerie vitrine** (`gallery-showme5wh.html:1`) : 24 max, musée — grille `1/2/3` propre sans croix, `lightbox` seul, pas de `localStorage`, pas de picker. `images` hardcodé 12 lexique + 12 4w1h. Limite 24 fixée.
+- **Galerie vitrine** (`gallery-showme5wh.html:1`) : 24 max composition libre, musée — grille `1/2/3` propre sans croix, `lightbox` seul, pas de `localStorage`, pas de picker. `images` hardcodé ≤24 libre (any cat/any mix). Limite 24 fixée.
 - **Placard local** (`placard.html:1`, ignoré git) : 904 pièces (`wardrobeFull` embarqué 1.1GB scan `Images générés` 120 + `ComfyUI/output` 701 + `typst` 27 + `batch` 24 + `autre` 32) via symlink `assets/wardrobe-full` → `../Image generator `, filtres `all/perspective/style/comfy/...` + recherche + pagination 48 + `toggle` + limite 24 + `Publier` → `cp` vers `showme5wh`.
 - **DATA** (`index.html:103-116`) : JSON inliné, pas de fetch — `file://` offline direct. `runtime` = `opencode` (4) / `claude` (4), `statut` = `prod` (6) / `WIP` (2).
 
@@ -36,12 +36,12 @@ open "/Users/fabien_1/Documents/Projet opencode/Agents/portfolio/placard.html"  
 - `cdn.tailwindcss.com` + `fonts.googleapis.com` + `unpkg.com/@phosphor-icons` requièrent réseau — en `file://` offline sans réseau, hero non stylé / icons manquantes. Pas de fallback local.
 - `assets/fog-hero-2400.jpg` (249 Ko) est le seul asset fog tracké et référencé (`og:image`, `fog-bg`, 3 calques). `fog-hero-flux-*.png` (1 Mo+) et `fog-hero-warm-2400.jpg` (3 Mo) sont untracked et ignorés (`.gitignore`).
 - Espace dans `Projet opencode` et `Image generator ` — toujours quoter, symlink `wardrobe-full` pointe vers chemin avec espace + accent. `placard.html` = `file://` uniquement, pas sur GitHub.
-- `gallery-showme5wh.html` vitrine n'a plus de `localStorage` — plus de bug cache. `placard.html` garde `showme5wh:selection` + `fileKey` pour sync local vs fichier (bandeau jaune si divergent). Vitrine limitée à 24, placard aussi.
-- `assets/showme5wh/` 24 trackés — ne pas dépasser 24 en vitrine. Pour publier depuis placard : `cp wardrobe-full/... showme5wh/...` + `git add && git push`.
+- `gallery-showme5wh.html` vitrine n'a plus de `localStorage` — plus de bug cache. `placard.html` garde `showme5wh:selection` + `fileKey` pour sync local vs fichier (bandeau jaune si divergent, 2 boutons Garder/Restaurer). Vitrine limitée à 24, placard aussi.
+- `assets/showme5wh/` 24 trackés — ne pas dépasser 24 en vitrine. Pour publier depuis placard : `Publier la tenue → 1-click` (via `tools/publish-server.mjs` sur `127.0.0.1:8765`, fallback `cp wardrobe-full/... showme5wh/...`) + `git add && git push` auto. Renommage plat `cat__basename` si collision (32 collisions sur 904 : `batch 0.png`×4, `typst` vs `styles-starter` 15 doublons).
 
 ## Assets
 - `assets/fog-hero-2400.jpg` — Flux schnell `1216×832 → 2048×1400` recadré, aube pins + cône volumétrique `33% 38%`
-- `assets/showme5wh/` — 24 fichiers (12 JPG lexique `perspectives_print/styles-starter` + 12 PNG `4w1h_*`) — trackés, vitrine 24 max
+- `assets/showme5wh/` — 24 fichiers (composition libre ≤24, any cat/any mix) — trackés, vitrine 24 max
 - `assets/wardrobe` + `assets/wardrobe-full` — symlinks locaux vers `Images générés` et `Image generator ` (ignorés, 904 au placard)
 - `assets/comfy-output` — symlink local vers `ComfyUI/output` (ignoré)
 - `placard.html` — 904 placard local (ignoré git), pagination 48, filtres, publier
