@@ -1,6 +1,9 @@
 .DS_Store
 assets/wardrobe
+assets/wardrobe-full
 assets/comfy-output
 assets/fog-hero-flux-*.png
 assets/fog-hero-warm-*.jpg
 comfy-output
+placard.html
+wardrobe.html
