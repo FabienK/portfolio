@@ -68,7 +68,8 @@ const info = {
 };
 
 let selection = JSON.parse(localStorage.getItem('showme5wh:selection')||'null');
-if(!Array.isArray(selection) || selection.length===0) selection = [...defaultImages];
+// si ancien choix bancal (2 photos) on remet les 18 automatiquement une fois
+if(!Array.isArray(selection) || selection.length===0 || selection.length===2) selection = [...defaultImages];
 
 const grid = document.getElementById('grid');
 const countEl = document.getElementById('count');
