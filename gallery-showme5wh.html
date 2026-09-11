@@ -109,7 +109,11 @@ function render(){
     </div>`;
   }).join('');
 }
-function toggle(f){ if(selection.includes(f)) selection = selection.filter(x=>x!==f); else selection.push(f); save(); render(); }
+function toggle(f){
+  if(selection.includes(f)) selection = selection.filter(x=>x!==f);
+  else { selection.push(f); selection.sort((a,b)=> defaultImages.indexOf(a) - defaultImages.indexOf(b)); }
+  save(); render();
+}
 function removeImg(f){ selection = selection.filter(x=>x!==f); save(); render(); }
 function reset18(){ selection=[...defaultImages]; save(); render(); }
 function openLb(f){ const m=info[f]||{label:f,bag:"",model:"Flux schnell"}; document.getElementById('lb-img').src="assets/showme5wh/"+f; document.getElementById('lb-cap').innerHTML=`<b>${m.label}</b> · ${f} <span class='opacity-60'>· ${m.bag} · ${m.model}</span>`; document.getElementById('lightbox').classList.remove('hidden'); document.body.style.overflow='hidden'; }
