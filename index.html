@@ -80,6 +80,12 @@
   </div>
 </header>
 
+<dialog id="resume" style="border:1px solid #E8E6E1; border-radius:24px; padding:24px; max-width:480px; width:calc(100% - 32px); background:#FFFEFB; color:#1F2937; box-shadow:0 32px 80px rgba(26,26,24,0.18)">
+  <div style="display:flex; justify-content:space-between; gap:12px; align-items:flex-start"><h2 id="resume-titre" style="margin:0; font-size:15px; font-weight:700"></h2><button type="button" id="resume-fermer" aria-label="Fermer" style="border:0; background:none; cursor:pointer; font-size:20px; line-height:1">×</button></div>
+  <p id="resume-texte" style="margin:12px 0 0; font-size:13px; line-height:1.5"></p>
+  <ul id="resume-points" style="margin:12px 0 0; padding-left:18px; font-size:13px; line-height:1.5"></ul>
+</dialog>
+
 <main id="projets" class="px-4 max-w-[1200px] mx-auto pb-24">
   <div class="flex flex-wrap gap-2 mb-6">
     <button data-filter="all" class="filter-btn active bg-[#1A1A18] text-white rounded-full px-4 py-2 text-[12px] font-semibold">Tous</button>
@@ -103,20 +109,20 @@
 <script id="DATA" type="application/json">
 {
   "projects": [
-    {"name":"Figma — 5 Design Systems","oneLiner":"5 design systems en tokens CSS → produits shadcn + site vitrine","statut":"prod","cover":"◈","language":"CSS + Node","runtime":"opencode","maj":"2026-09-13"},
+    {"name":"Figma — 5 Design Systems","oneLiner":"5 design systems en tokens CSS → produits shadcn + site vitrine","statut":"prod","cover":"◈","language":"CSS + Node","runtime":"opencode","maj":"2026-09-13","resume":"Une chaîne complète qui part de tokens CSS et aboutit à des produits vendables.","points":["Tokens CSS déclinés en configuration shadcn et Tailwind, avec aperçu","Démos autonomes (dashboard, prototype, guide de style) : mêmes écrans, une palette par système","Vérification automatique, captures, archives ZIP, puis site vitrine (3 systèmes gratuits seulement)"]},
     {"name":"draw-it + ai-brief","oneLiner":"2 skills multi-agents : dessiner → spécifier (brief IA)","statut":"prod","cover":"✎","language":"HTML + JS vanilla","runtime":"opencode","href":"https://fabienk.github.io/draw-it/","maj":"2026-09-08"},
-    {"name":"Projet — Pack V1 Image IA","oneLiner":"Pack Gumroad print photoréaliste (lexique 35p + styles 22p)","statut":"prod","cover":"▣","language":"Python + Typst + Flux","runtime":"opencode","maj":"2026-09-08"},
+    {"name":"Projet — Pack V1 Image IA","oneLiner":"Pack Gumroad print photoréaliste (lexique 35p + styles 22p)","statut":"prod","cover":"▣","language":"Python + Typst + Flux","runtime":"opencode","maj":"2026-09-08","resume":"Pack Gumroad imprimable pour la photo IA photoréaliste, fabriqué de bout en bout.","points":["Lexique de 35 pages, guide de styles de 22 pages et aide-mémoire de 2 pages","Images générées avec Flux schnell via ComfyUI (1216×832 recadré en 2048×1400)","Mise en page Typst et ReportLab, archives ZIP Starter et Complet"]},
     {"name":"Business — Audit LinkedIn 79€","oneLiner":"Grille 18 critères → score /100","statut":"WIP","cover":"in","language":"Docs + Gumroad","runtime":"opencode","href":"https://fabiencraft3.gumroad.com/l/pgsnp","maj":"2026-09-08"},
     {"name":"App guitare — Outils guitariste","oneLiner":"PWA Rythme / Chords / Tabs PDF","statut":"WIP","cover":"♫","language":"Vite + React + PWA","runtime":"claude","href":"https://app-six-chi-99.vercel.app/","maj":"2026-09-09"},
     {"name":"Blog photo — Prisme","oneLiner":"Blog photo automatisé Flux → Astro → Pages","statut":"prod","cover":"◐","language":"Astro + ComfyUI","runtime":"claude","href":"https://fabienk.github.io/blog-photo/","maj":"2026-10-25"},
     {"name":"Encyclo-Nana — Briques","oneLiner":"App ludo-éducative 6e — 204 briques (6 univers)","statut":"WIP","cover":"⬢","language":"Next.js + Supabase","runtime":"claude","href":"https://web-steel-mu-60.vercel.app","maj":"2026-10-21"},
     {"name":"Image generator — ShowMe5WH","oneLiner":"Backend 300 DPI ComfyUI M4 — source Pack V1","statut":"prod","cover":"⬣","language":"Python + ComfyUI","runtime":"claude","href":"gallery-showme5wh.html","maj":"2026-09-21"},
-    {"name":"Interface espace — Constellation","oneLiner":"Menu planète interactif : 5 corps en orbite, trou noir, lumière jour/nuit","statut":"WIP","cover":"✦","language":"HTML + Three.js","runtime":"claude","maj":"2026-08-21"},
-    {"name":"POC — PocStudio Mindmap","oneLiner":"Carte mentale à fiches déplaçables (pan/zoom) depuis Markdown, TXT ou PDF","statut":"WIP","cover":"⧉","language":"HTML + JS (pdf.js)","runtime":"claude","maj":"2026-09-10"},
+    {"name":"Interface espace — Constellation","oneLiner":"Menu planète interactif : 5 corps en orbite, trou noir, lumière jour/nuit","statut":"WIP","cover":"✦","language":"HTML + Three.js","runtime":"claude","maj":"2026-08-21","resume":"Prototype de menu d'accueil : une planète et des corps célestes en orbite servent de navigation.","points":["5 corps sur orbites elliptiques, trou noir central, lumière jour/nuit","Glisser librement, noyau plein, teaser périodique toutes les 7 s","Une seule page HTML avec Three.js, sans installation ni build. Reste à choisir entre Dock, Bandeau ou Rail"]},
+    {"name":"POC — PocStudio Mindmap","oneLiner":"Carte mentale à fiches déplaçables (pan/zoom) depuis Markdown, TXT ou PDF","statut":"WIP","cover":"⧉","language":"HTML + JS (pdf.js)","runtime":"claude","maj":"2026-09-10","resume":"Lecteur de cartes mentales : chaque fiche est un bloc que l'on déplace sur un grand plan.","points":["Import de Markdown, de texte ou de PDF (pdf.js, marked)","Déplacement et zoom du plan, liens entre fiches","Un seul fichier HTML qui fonctionne hors ligne, données gardées dans le navigateur"]},
     {"name":"World-nana — PWA iPad","oneLiner":"PWA iPad pour une collégienne : 5 jeux de langage, hors ligne, sans compte","statut":"WIP","cover":"⬡","language":"PWA (JS + Workbox)","runtime":"claude","href":"https://github.com/FabienK/World-nana","maj":"2026-10-01"},
-    {"name":"Couronne — Simulateur d'ampli","oneLiner":"Simulateur d'ampli guitare macOS/iPad/iPhone : Tone King + Cory Wong, 84 sons, moteur DSP C++","statut":"WIP","cover":"♛","language":"SwiftUI + C++17","runtime":"claude","maj":"2026-10-18"},
-    {"name":"Guide Fruits & Légumes","oneLiner":"Web app : identifier un produit par texte, voix ou photo — choix, goût, conservation, nutrition Ciqual","statut":"WIP","cover":"◍","language":"Node + Express","runtime":"claude","maj":"2026-10-26"},
-    {"name":"clip-arena — Clip sneakers","oneLiner":"Clip de lancement ~40 s pour sneakers : 11 plans, Colisée à l'heure dorée, 3 versions","statut":"prod","cover":"▶","language":"Seedance + Python","runtime":"claude","maj":"2026-10-07"},
+    {"name":"Couronne — Simulateur d'ampli","oneLiner":"Simulateur d'ampli guitare macOS/iPad/iPhone : Tone King + Cory Wong, 84 sons, moteur DSP C++","statut":"WIP","cover":"♛","language":"SwiftUI + C++17","runtime":"claude","maj":"2026-10-18","resume":"Simulateur d'ampli guitare natif, né de l'analyse d'un ampli réel, avec interface et moteur audio originaux.","points":["Deux familles réunies : Tone King et Cory Wong, 84 sons au total","Moteur DSP en C++17 : gate, compresseur, auto-wah, overdrive, baffles à convolution, EQ 9 bandes, chorus, trémolo, delay, réverbération, accordeur","macOS, avec portages iPad et iPhone. 26 tests audio réussis sur la première version. Audio USB sur tablette à vérifier"]},
+    {"name":"Guide Fruits & Légumes","oneLiner":"Web app : identifier un produit par texte, voix ou photo — choix, goût, conservation, nutrition Ciqual","statut":"WIP","cover":"◍","language":"Node + Express","runtime":"claude","maj":"2026-10-26","resume":"Application web grand public pour reconnaître un fruit, un légume ou une herbe et savoir quoi en faire.","points":["Recherche par texte, voix ou photo, avec réponse locale d'abord et IA en repli","Fiche rapide : bien choisir, goût et texture, conservation, puis détails (recette, origine, saison)","Variétés reliées au produit parent et volet nutrition Ciqual 2025. Version iPhone en cours"]},
+    {"name":"clip-arena — Clip sneakers","oneLiner":"Clip de lancement ~40 s pour sneakers : 11 plans, Colisée à l'heure dorée, 3 versions","statut":"prod","cover":"▶","language":"Seedance + Python","runtime":"claude","maj":"2026-10-07","resume":"Clip de lancement d'environ 40 secondes pour une paire de sneakers, entièrement généré et monté.","points":["11 plans, Colisée à l'heure dorée, calé sur une musique de 120 BPM","3 versions de la paire testées, la rouge verni retenue","Livré en 16:9 et en 9:16, avec ou sans texte « lancement »"]},
     {"name":"site-sneakers — Arena Sneaker","oneLiner":"Site statique + atelier 3D : création de sneakers, duels, votes et drops","statut":"WIP","cover":"◭","language":"HTML + 3D","runtime":"claude","href":"https://github.com/FabienK/site-sneakers","maj":"2026-10-24"}
   ]
 }
@@ -160,7 +166,9 @@ function render(filter='all'){
             <p style="margin:12px 0 0; font-size:13px; line-height:1.5; color:#374151; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden">${p.oneLiner}</p>
             ${p.href ? `<a href="${p.href}" target="_blank" rel="noopener" style="margin-top:14px; display:inline-flex; align-items:center; gap:8px; background:#1F2937; color:#fff; border-radius:999px; padding:8px 16px; font-size:12px; font-weight:700; text-decoration:none">
               Découvrir <span style="width:20px;height:20px; border-radius:50%; background:rgba(255,255,255,0.2); display:grid; place-items:center; font-size:12px">↗</span>
-            </a>` : `<span style="margin-top:14px; display:inline-flex; align-items:center; border:1px dashed #D1D5DB; color:#6B7280; border-radius:999px; padding:8px 16px; font-size:12px; font-weight:600">Pas encore en ligne</span>`}
+            </a>` : `<button type="button" class="resume-btn" data-name="${p.name}" style="margin-top:14px; display:inline-flex; align-items:center; gap:8px; background:#1F2937; color:#fff; border:0; cursor:pointer; border-radius:999px; padding:8px 16px; font-size:12px; font-weight:700">
+              Résumé <span style="width:20px;height:20px; border-radius:50%; background:rgba(255,255,255,0.2); display:grid; place-items:center; font-size:12px">+</span>
+            </button>`}
           </div>
         </div>
         <div style="display:flex; gap:8px; padding:12px 8px 4px; align-items:center">
@@ -170,12 +178,22 @@ function render(filter='all'){
       </div>`;
     grid.appendChild(el);
   });
+  document.querySelectorAll('.resume-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    const p=data.projects.find(x=>x.name===btn.dataset.name); if(!p) return;
+    document.getElementById('resume-titre').textContent=p.name;
+    document.getElementById('resume-texte').textContent=p.resume||p.oneLiner;
+    const ul=document.getElementById('resume-points'); ul.innerHTML='';
+    (p.points||[]).forEach(t=>{const li=document.createElement('li'); li.textContent=t; ul.appendChild(li)});
+    document.getElementById('resume').showModal();
+  }));
   requestAnimationFrame(()=>document.querySelectorAll('.reveal').forEach(el=>{
     const io=new IntersectionObserver(ents=>{ents.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in'); io.unobserve(e.target)}})},{threshold:0.1});
     io.observe(el);
   }));
   setTimeout(()=>document.querySelectorAll('.reveal').forEach(e=>e.classList.add('in')),80);
 }
+document.getElementById('resume-fermer').addEventListener('click',()=>document.getElementById('resume').close());
+document.getElementById('resume').addEventListener('click',e=>{if(e.target.id==='resume') e.target.close()});
 const filterTone={all:'bg-[#1A1A18] text-white border-[#1A1A18]',prod:'bg-[#1A1A18] text-white border-[#1A1A18]',WIP:'bg-[#1A1A18] text-white border-[#1A1A18]',opencode:'bg-[#1A1A18] text-white border-[#1A1A18]',claude:'bg-[#1A1A18] text-white border-[#1A1A18]'};
 document.querySelectorAll('.filter-btn').forEach(b=>{
   b.addEventListener('click',()=>{
