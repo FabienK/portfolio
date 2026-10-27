@@ -1,8 +1,8 @@
 # AGENTS.md — portfolio
 
 ## Nature
-- Portfolio Fabien — 15 projets, statut prod/WIP par carte (Figma 5 DS, draw-it, Pack V1, Audit LinkedIn, App guitare, Prisme, Encyclo-Nana, ShowMe5WH, Interface espace, PocStudio Mindmap, World-nana, Couronne, Guide Fruits & Légumes, clip-arena, site-sneakers) — `FDFBF7` + `Plus Jakarta Sans` + `Instrument Serif`. `file://` offline-first + `https://fabienk.github.io/portfolio/` OK.
-- Stack : HTML statique pur (`index.html` canonique) + `DATA` embarquée (`<script id="DATA">` JSON 15 projets) + Tailwind CDN + Phosphor Icons CDN. Pas de `package.json`, pas de build — ne pas `npm install`/`build`.
+- Portfolio Fabien — 16 projets, statut prod/WIP par carte (Figma 5 DS, draw-it, Pack V1, Audit LinkedIn, App guitare, Prisme, Encyclo-Nana, ShowMe5WH, Interface espace, PocStudio Mindmap, World-nana, Couronne, Guide Fruits & Légumes, clip-arena, site-sneakers, Boîte à skill) — `FDFBF7` + `Plus Jakarta Sans` + `Instrument Serif`. `file://` offline-first + `https://fabienk.github.io/portfolio/` OK.
+- Stack : HTML statique pur (`index.html` canonique) + `DATA` embarquée (`<script id="DATA">` JSON 16 projets) + Tailwind CDN + Phosphor Icons CDN. Pas de `package.json`, pas de build — ne pas `npm install`/`build`.
 - Spec canonique : `prompt-portfolio.md:1` — hero réduit `pt-24 pb-10`, bezel `p-6 sm:p-8 py-8`, titre `32/44/52px`, stats `22px`.
 
 ## Workspace
@@ -30,7 +30,7 @@ open "/Users/fabien_1/Documents/Projet opencode/Agents/portfolio/placard.html"  
 - **Grille** (`index.html:130-179`) : `grid-cols-12 gap-5`, `col-span-12 lg:col-span-8` pour le 1er, `col-span-12 sm:col-span-6 lg:col-span-4` ensuite. Cartes bezel `rounded-[32px]/[24px]` `border-left:3px`, `reveal` `translateY 14px blur 4px 700ms cubic-bezier(0.32,0.72,0,1)` + stagger `40ms` + `IntersectionObserver threshold 0.1`. Filtres `data-filter` (`all/prod/WIP/opencode/claude`).
 - **Galerie vitrine** (`gallery-showme5wh.html:1`) : 24 max composition libre, musée — grille `1/2/3` propre sans croix, `lightbox` seul, pas de `localStorage`, pas de picker. `images` hardcodé ≤24 libre (any cat/any mix). Limite 24 fixée.
 - **Placard local** (`placard.html:1`, ignoré git) : 904 pièces (`wardrobeFull` embarqué 1.1GB scan `Images générés` 120 + `ComfyUI/output` 701 + `typst` 27 + `batch` 24 + `autre` 32) via symlink `assets/wardrobe-full` → `../Image generator `, filtres `all/perspective/style/comfy/...` + recherche + pagination 48 + `toggle` + limite 24 + `Publier` → `cp` vers `showme5wh`.
-- **DATA** (`index.html:103-116`) : JSON inliné, pas de fetch — `file://` offline direct. `runtime` = `opencode` (4) / `claude` (11). `href` absent = carte « Pas encore en ligne » (pas de lien factice). `maj` = date de mise à jour affichée.
+- **DATA** (`index.html:103-116`) : JSON inliné, pas de fetch — `file://` offline direct. `runtime` = `opencode` (4) / `claude` (12). `href` absent = carte « Pas encore en ligne » (pas de lien factice). `maj` = date de mise à jour affichée.
 
 ## Gotchas vérifiés
 - `cdn.tailwindcss.com` + `fonts.googleapis.com` + `unpkg.com/@phosphor-icons` requièrent réseau — en `file://` offline sans réseau, hero non stylé / icons manquantes. Pas de fallback local.

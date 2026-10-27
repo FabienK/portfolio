@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Fabien — Portfolio — 15 projets</title>
-<meta name="description" content="Portfolio de Fabien — 15 projets (design systems, PWA, apps macOS et web, print 300 DPI, vidéo IA). Statut affiché sur chaque carte. Disponible pour missions.">
+<title>Fabien — Portfolio — 16 projets</title>
+<meta name="description" content="Portfolio de Fabien — 16 projets (design systems, PWA, apps macOS et web, print 300 DPI, vidéo IA). Statut affiché sur chaque carte. Disponible pour missions.">
 <meta property="og:title" content="Fabien — Portfolio">
-<meta property="og:description" content="15 projets — design systems, PWA, apps audio, print 300 DPI">
+<meta property="og:description" content="16 projets — design systems, PWA, apps audio, print 300 DPI">
 <meta property="og:image" content="assets/fog-hero-2400.jpg">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231A1A18'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' font-family='Instrument Serif, Georgia, serif' font-size='14' fill='white'>F</text></svg>">
@@ -65,15 +65,15 @@
       <div class="relative z-10">
       <p class="inline-flex items-center gap-2 text-[10px] font-bold tracking-[0.18em] uppercase text-white bg-[#1A1A18] rounded-full px-3 py-1.5 ring-1 ring-emerald-400/30"><span class="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span> Disponible pour missions</p>
       <h1 class="display text-[32px] sm:text-[44px] lg:text-[52px] font-normal leading-[0.9] tracking-[-0.04em] mt-5">Fabien<br><span class="italic font-normal text-[#6B6B6B]">construit des produits</span></h1>
-      <p class="max-w-[60ch] text-[14px] leading-relaxed text-[#3A3A38] mt-4">15 projets · 10 dépôts GitHub. Design systems, apps guitare, packs print, vidéo IA — le statut (en production ou en cours) est indiqué sur chaque carte.</p>
+      <p class="max-w-[60ch] text-[14px] leading-relaxed text-[#3A3A38] mt-4">16 projets · 10 dépôts GitHub. Design systems, apps guitare, packs print, vidéo IA — le statut (en production, en cours ou terminé) est indiqué sur chaque carte.</p>
       <div class="flex flex-wrap gap-3 mt-6">
         <a href="#projets" class="inline-flex items-center gap-2 bg-[#1A1A18] text-white rounded-full pl-5 pr-2 py-2.5 text-[13px] font-semibold">Voir les projets <span class="size-7 rounded-full bg-white/15 grid place-items-center"><i class="ph ph-arrow-down"></i></span></a>
         <a href="https://fabienk.github.io/draw-it/" target="_blank" class="inline-flex items-center gap-2 bg-white border border-black/10 rounded-full px-5 py-2.5 text-[13px] font-semibold">draw-it ↗</a>
       </div>
       <div class="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-black/5">
-        <div><div class="display text-[22px] font-bold text-emerald-700">15</div><div class="text-[11px] font-bold tracking-widest uppercase text-muted">Produits</div></div>
-        <div><div class="display text-[22px] font-bold text-blue-700">10</div><div class="text-[11px] font-bold tracking-widest uppercase text-muted">Repos GH</div></div>
-        <div><div class="display text-[22px] font-bold text-violet-700">3</div><div class="text-[11px] font-bold tracking-widest uppercase text-muted">Privés</div></div>
+        <div><div class="display text-[22px] font-bold text-emerald-700" id="stat-projets">16</div><div class="text-[11px] font-bold tracking-widest uppercase text-muted">Projets</div></div>
+        <div><div class="display text-[22px] font-bold text-blue-700" id="stat-prod">5</div><div class="text-[11px] font-bold tracking-widest uppercase text-muted">En production</div></div>
+        <div><div class="display text-[22px] font-bold text-violet-700">10</div><div class="text-[11px] font-bold tracking-widest uppercase text-muted">Dépôts GitHub</div></div>
       </div>
       </div>
     </div>
@@ -90,6 +90,7 @@
   <div class="flex flex-wrap gap-2 mb-6">
     <button data-filter="all" class="filter-btn active bg-[#1A1A18] text-white rounded-full px-4 py-2 text-[12px] font-semibold">Tous</button>
     <button data-filter="prod" class="filter-btn bg-white border border-black/10 rounded-full px-4 py-2 text-[12px] font-semibold">Prod</button>
+    <button data-filter="terminé" class="filter-btn bg-white border border-black/10 rounded-full px-4 py-2 text-[12px] font-semibold">Terminé</button>
     <button data-filter="WIP" class="filter-btn bg-white border border-black/10 rounded-full px-4 py-2 text-[12px] font-semibold">WIP</button>
     <button data-filter="opencode" class="filter-btn bg-white border border-black/10 rounded-full px-4 py-2 text-[12px] font-semibold">OpenCode</button>
     <button data-filter="claude" class="filter-btn bg-white border border-black/10 rounded-full px-4 py-2 text-[12px] font-semibold">Claude</button>
@@ -122,8 +123,9 @@
     {"name":"World-nana — PWA iPad","oneLiner":"PWA iPad pour une collégienne : 5 jeux de langage, hors ligne, sans compte","statut":"WIP","cover":"⬡","language":"PWA (JS + Workbox)","runtime":"claude","href":"https://github.com/FabienK/World-nana","maj":"2026-10-01"},
     {"name":"Couronne — Simulateur d'ampli","oneLiner":"Simulateur d'ampli guitare macOS/iPad/iPhone : Tone King + Cory Wong, 84 sons, moteur DSP C++","statut":"WIP","cover":"♛","language":"SwiftUI + C++17","runtime":"claude","maj":"2026-10-18","resume":"Simulateur d'ampli guitare natif, né de l'analyse d'un ampli réel, avec interface et moteur audio originaux.","points":["Deux familles réunies : Tone King et Cory Wong, 84 sons au total","Moteur DSP en C++17 : gate, compresseur, auto-wah, overdrive, baffles à convolution, EQ 9 bandes, chorus, trémolo, delay, réverbération, accordeur","macOS, avec portages iPad et iPhone. 26 tests audio réussis sur la première version. Audio USB sur tablette à vérifier"]},
     {"name":"Guide Fruits & Légumes","oneLiner":"Web app : identifier un produit par texte, voix ou photo — choix, goût, conservation, nutrition Ciqual","statut":"WIP","cover":"◍","language":"Node + Express","runtime":"claude","maj":"2026-10-26","resume":"Application web grand public pour reconnaître un fruit, un légume ou une herbe et savoir quoi en faire.","points":["Recherche par texte, voix ou photo, avec réponse locale d'abord et IA en repli","Fiche rapide : bien choisir, goût et texture, conservation, puis détails (recette, origine, saison)","Variétés reliées au produit parent et volet nutrition Ciqual 2025. Version iPhone en cours"]},
-    {"name":"clip-arena — Clip sneakers","oneLiner":"Clip de lancement ~40 s pour sneakers : 11 plans, Colisée à l'heure dorée, 3 versions","statut":"prod","cover":"▶","language":"Seedance + Python","runtime":"claude","maj":"2026-10-07","resume":"Clip de lancement d'environ 40 secondes pour une paire de sneakers, entièrement généré et monté.","points":["11 plans, Colisée à l'heure dorée, calé sur une musique de 120 BPM","3 versions de la paire testées, la rouge verni retenue","Livré en 16:9 et en 9:16, avec ou sans texte « lancement »"]},
-    {"name":"site-sneakers — Arena Sneaker","oneLiner":"Site statique + atelier 3D : création de sneakers, duels, votes et drops","statut":"WIP","cover":"◭","language":"HTML + 3D","runtime":"claude","href":"https://github.com/FabienK/site-sneakers","maj":"2026-10-24"}
+    {"name":"clip-arena — Clip sneakers","oneLiner":"Clip de lancement ~40 s pour sneakers : 11 plans, Colisée à l'heure dorée, 3 versions","statut":"terminé","cover":"▶","language":"Seedance + Python","runtime":"claude","maj":"2026-10-07","resume":"Clip de lancement d'environ 40 secondes pour une paire de sneakers, entièrement généré et monté.","points":["11 plans, Colisée à l'heure dorée, calé sur une musique de 120 BPM","3 versions de la paire testées, la rouge verni retenue","Livré en 16:9 et en 9:16, avec ou sans texte « lancement »"]},
+    {"name":"site-sneakers — Arena Sneaker","oneLiner":"Site statique + atelier 3D : création de sneakers, duels, votes et drops","statut":"WIP","cover":"◭","language":"HTML + 3D","runtime":"claude","href":"https://github.com/FabienK/site-sneakers","maj":"2026-10-24"},
+    {"name":"Boîte à skill — Thought-to-Tool Factory","oneLiner":"Transforme les publications d'ingénieurs IA en artefacts logiciels, avec validation humaine","statut":"WIP","cover":"⚙","language":"TypeScript","runtime":"claude","maj":"2026-10-27","resume":"Un outil qui lit les publications d'ingénieurs IA (blogs, podcasts, dépôts GitHub) et les transforme en artefacts logiciels, après avoir vérifié que l'équivalent n'existe pas déjà.","points":["Moteur d'extraction de concepts et catalogue des opportunités, avec estimation du coût","Interface web (boîte de réception, détail d'une opportunité, validation avant production) et daemon de veille","Une validation humaine reste obligatoire avant toute production. Première version v4 commitée le 26 octobre"]}
   ]
 }
 </script>
@@ -132,11 +134,13 @@
 const data = JSON.parse(document.getElementById('DATA').textContent);
 const grid = document.getElementById('grid');
 const tone = {prod:'bg-emerald-50 text-emerald-800 border-emerald-200', WIP:'bg-amber-50 text-amber-800 border-amber-200', vide:'bg-slate-50 text-slate-600 border-slate-200'};
+document.getElementById('stat-projets').textContent=data.projects.length;
+document.getElementById('stat-prod').textContent=data.projects.filter(p=>p.statut==='prod').length;
 function render(filter='all'){
   grid.innerHTML='';
   const list = data.projects.filter(p=>{
     if(filter==='all') return true;
-    if(filter==='prod'||filter==='WIP') return p.statut===filter;
+    if(['prod','WIP','terminé'].includes(filter)) return p.statut===filter;
     return p.runtime===filter;
   });
   // palette épurée — un seul accent (ink) + neutres chauds, saturation <80%
@@ -147,8 +151,8 @@ function render(filter='all'){
     const el=document.createElement('div');
     el.className=`reveal ${span}`;
     el.style.transitionDelay=(i*40)+'ms';
-    const toneBg = p.statut==='prod' ? '#ECFDF5' : p.statut==='WIP' ? '#FEF3C7' : '#F3F4F6';
-    const toneColor = p.statut==='prod' ? '#065F46' : p.statut==='WIP' ? '#92400E' : '#475569';
+    const toneBg = p.statut==='prod' ? '#ECFDF5' : p.statut==='WIP' ? '#FEF3C7' : p.statut==='terminé' ? '#EFF6FF' : '#F3F4F6';
+    const toneColor = p.statut==='prod' ? '#065F46' : p.statut==='WIP' ? '#92400E' : p.statut==='terminé' ? '#1E40AF' : '#475569';
     const accent = accentMap[p.name] || {bg:"#FDFBF7",bd:"#E8E6E1",dot:"#1A1A18",left:"#1A1A18"};
     el.innerHTML=`
       <div style="background:#fff; border:1px solid #E8E6E1; border-radius:32px; padding:6px; box-shadow:0 12px 32px rgba(26,26,24,0.06)">
@@ -194,7 +198,7 @@ function render(filter='all'){
 }
 document.getElementById('resume-fermer').addEventListener('click',()=>document.getElementById('resume').close());
 document.getElementById('resume').addEventListener('click',e=>{if(e.target.id==='resume') e.target.close()});
-const filterTone={all:'bg-[#1A1A18] text-white border-[#1A1A18]',prod:'bg-[#1A1A18] text-white border-[#1A1A18]',WIP:'bg-[#1A1A18] text-white border-[#1A1A18]',opencode:'bg-[#1A1A18] text-white border-[#1A1A18]',claude:'bg-[#1A1A18] text-white border-[#1A1A18]'};
+const filterTone={terminé:'bg-[#1A1A18] text-white border-[#1A1A18]',all:'bg-[#1A1A18] text-white border-[#1A1A18]',prod:'bg-[#1A1A18] text-white border-[#1A1A18]',WIP:'bg-[#1A1A18] text-white border-[#1A1A18]',opencode:'bg-[#1A1A18] text-white border-[#1A1A18]',claude:'bg-[#1A1A18] text-white border-[#1A1A18]'};
 document.querySelectorAll('.filter-btn').forEach(b=>{
   b.addEventListener('click',()=>{
     document.querySelectorAll('.filter-btn').forEach(x=>{x.className='filter-btn bg-white border border-black/10 rounded-full px-4 py-2 text-[12px] font-semibold'});
